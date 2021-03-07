@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="fragments/head" />
+<body>
+	<nav th:replace="fragments/nav" />
+	<div class="container" style="text-align: center">
+		<h2 th:text="#{welcome.message}"></h2>
+		<h3>Esta es una zona privada la web</h3>
+		<p>
+			Usuario Autenticado como :
+			<span sec:authentication="principal.username"
+ 			th:inline="text"></span>
+		</p>
+		<p>Notas del usuario</p>
+		<button type="button" id="updateButton" class="btn btn-default">Actualizar</button>
+		<script th:inline="javascript">
+			/*<![CDATA[*/
+				$("#updateButton").click(function() {
+					 var numberPage = [[${param.page}]];
+					 var urlUpdate = '/mark/list/update';
+					 if (numberPage != null ){
+					 	urlUpdate += "?page="+numberPage[0];
+					 }
+					 $("#tableMarks").load(urlUpdate);
+				});
+			/*]]>*/
+		</script>
+		<div class="table-responsive">
+			<table th:replace="fragments/tableMarks" th:fragment="tableMarks"
+	id="tableMarks"/>
+		</div>
+	</div>
+	<footer th:replace="fragments/footer" />
+</body>
+</html>

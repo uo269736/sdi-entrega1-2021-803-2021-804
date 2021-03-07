@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="fragments/head"/>
+
+<body>
+
+<!-- Barra de Navegación superior -->
+
+
+<nav th:replace="fragments/nav"/>
+
+
+
+<div class="container">
+  <h2>Detalles del profesor</h2>                                                                            
+  <div class="panel panel-default">
+	  <div class="panel-heading">Dni</div>
+	  <div class="panel-body" th:text="${professor.dni}">
+		64537655D
+	  </div>
+  </div>
+  <div class="panel panel-default">
+	  <div class="panel-heading">Nombre</div>
+	  <div class="panel-body" th:text="${professor.nombre}">
+		Maria
+	  </div>
+  </div>
+  <div class="panel panel-default">
+	  <div class="panel-heading">Apellidos</div>
+	  <div class="panel-body" th:text="${professor.apellidos}">
+		Fernandez Alvarez
+	  </div>
+  </div>
+  <div class="panel panel-default">
+	  <div class="panel-heading">Categoria</div>
+	  <div class="panel-body" th:text="${professor.categoria}">
+		Ciencias
+	  </div>
+  </div>
+</div>
+<footer th:replace="fragments/footer"/>
+
+
+</body>
+</html>
