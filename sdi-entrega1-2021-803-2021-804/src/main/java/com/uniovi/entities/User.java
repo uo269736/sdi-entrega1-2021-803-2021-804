@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
-public class Usuario {
+public class User {
 	
 	@Id
 	@GeneratedValue
@@ -28,7 +28,7 @@ public class Usuario {
 	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
 	private Set<Oferta> ofertas;
 
-	public Usuario(Long id,String nombre ,String apellidos, String email) {
+	public User(Long id,String nombre ,String apellidos, String email) {
 		super();
 		this.id = id;
 		this.nombre=nombre;
@@ -36,7 +36,7 @@ public class Usuario {
 		this.email=email;
 	}
 	
-	public Usuario() {
+	public User() {
 	}
 
 	public Long getId() {

@@ -18,7 +18,7 @@ public class Oferta {
 	
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")
-	private Usuario usuario;
+	private User usuario;
 
 	public Oferta(Long id,String titulo ,String descripcion, Date fechaAlta, double cantidad) {
 		super();
@@ -29,7 +29,7 @@ public class Oferta {
 		this.cantidad = cantidad;
 	}
 	
-	public Oferta(String titulo ,String descripcion, Date fechaAlta, double cantidad, Usuario usuario) {
+	public Oferta(String titulo ,String descripcion, Date fechaAlta, double cantidad, User usuario) {
 		super();
 		this.titulo=titulo;
 		this.descripcion = descripcion;
@@ -81,11 +81,11 @@ public class Oferta {
 		this.cantidad = cantidad;
 	}
 
-	public Usuario getUsuario() {
+	public User getUsuario() {
 		return usuario;
 	}
 
-	public void setUsuario(Usuario usuario) {
+	public void setUsuario(User usuario) {
 		this.usuario = usuario;
 	}
 
