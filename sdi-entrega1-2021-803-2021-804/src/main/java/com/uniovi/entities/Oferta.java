@@ -15,10 +15,11 @@ public class Oferta {
 	private String descripcion;
 	private Date fechaAlta;
 	private double cantidad;
+	private boolean comprada;
 	
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")
-	private Usuario usuario;
+	private User user;
 
 	public Oferta(Long id,String titulo ,String descripcion, Date fechaAlta, double cantidad) {
 		super();
@@ -27,15 +28,16 @@ public class Oferta {
 		this.descripcion = descripcion;
 		this.fechaAlta=fechaAlta;
 		this.cantidad = cantidad;
+		setComprada(false);
 	}
 	
-	public Oferta(String titulo ,String descripcion, Date fechaAlta, double cantidad, Usuario usuario) {
+	public Oferta(String titulo ,String descripcion, Date fechaAlta, double cantidad, User usuario) {
 		super();
 		this.titulo=titulo;
 		this.descripcion = descripcion;
 		this.fechaAlta=fechaAlta;
 		this.cantidad = cantidad;
-		this.usuario=usuario;
+		this.user=usuario;
 	}
 	
 	public Oferta() {
@@ -81,18 +83,26 @@ public class Oferta {
 		this.cantidad = cantidad;
 	}
 
-	public Usuario getUsuario() {
-		return usuario;
+	public boolean isComprada() {
+		return comprada;
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public void setComprada(boolean comprada) {
+		this.comprada = comprada;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	@Override
 	public String toString() {
 		return "Oferta [id=" + id + ", titulo=" + titulo + ", descripcion=" + descripcion + ", fechaAlta=" + fechaAlta
-				+ ", cantidad=" + cantidad + ", usuario=" + usuario + "]";
+				+ ", cantidad=" + cantidad + ", usuario=" + user + "]";
 	}
 	
 	

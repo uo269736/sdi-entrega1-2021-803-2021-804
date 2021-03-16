@@ -1,5 +1,5 @@
 package com.uniovi.controllers;
 
-public class UsuarioController {
+public class UserController {
 
 }

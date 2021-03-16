@@ -1,5 +1,5 @@
 package com.uniovi.services;
 
-public class UsuarioService {
+public class UserService {
 
 }
