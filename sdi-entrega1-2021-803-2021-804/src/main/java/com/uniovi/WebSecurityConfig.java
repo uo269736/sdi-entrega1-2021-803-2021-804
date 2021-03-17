@@ -26,16 +26,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-//		http.csrf().disable().authorizeRequests()
-//				.antMatchers("/css/**", "/img/**", "/script/**", "/", "/signup", "/login/**").permitAll()
-//				.antMatchers("/mark/add").hasAuthority("ROLE_PROFESSOR").antMatchers("/mark/edit/*")
-//				.hasAuthority("ROLE_PROFESSOR").antMatchers("/mark/delete/*").hasAuthority("ROLE_PROFESSOR")
-//				.antMatchers("/mark/**").hasAnyAuthority("ROLE_STUDENT", "ROLE_PROFESSOR", "ROLE_ADMIN")
-//				.antMatchers("/professor/list").hasAnyAuthority("ROLE_STUDENT", "ROLE_PROFESSOR", "ROLE_ADMIN")
-//				.antMatchers("/professor/details/**").hasAnyAuthority("ROLE_PROFESSOR", "ROLE_ADMIN")
-//				.antMatchers("/professor/**").hasAnyAuthority("ROLE_ADMIN")
-//				.antMatchers("/user/**").hasAnyAuthority("ROLE_ADMIN").anyRequest().authenticated().and().formLogin()
-//				.loginPage("/login").permitAll().defaultSuccessUrl("/home").and().logout().permitAll();
+		http.csrf().disable().authorizeRequests()
+				.antMatchers("/css/**", "/img/**", "/script/**", "/", "/signup", "/login/**").permitAll()
+				.antMatchers("/oferta/add").hasAuthority("ROLE_USUARIO")
+				.antMatchers("/oferta/delete/*").hasAnyAuthority("ROLE_USUARIO","ROLE_ADMIN")
+				.antMatchers("/user/list/*").hasAnyAuthority("ROLE_ADMIN")
+				.antMatchers("/user/delete/*").hasAnyAuthority("ROLE_ADMIN")
+				.anyRequest().authenticated().and().formLogin()
+				.loginPage("/login").permitAll().defaultSuccessUrl("/home").and().logout().permitAll();
 	}
 
 	@Autowired

@@ -13,37 +13,27 @@
 			<ul class="nav navbar-nav" sec:authorize="isAuthenticated()">
 				<li><a href="/">Home</a></li>
 				<li id="marks-menu" class="dropdown"><a class="dropdown-toogle"
-					data-toggle="dropdown" href="#" th:text="#{gestion.notas}">
-						Gesti贸n de notas <span class="caret"></span>
-				</a>
+					data-toggle="dropdown" href="#" >
+						Gesti贸n de Ofertas <span class="caret"></span>
+				</a><!-- ACORDARSE DE INTERNACIONALIZAR -->
 					<ul class="dropdown-menu">
 						<li sec:authorize="hasRole('ROLE_PROFESSOR')"><a
-							href="/mark/add" th:text="#{gestion.notas.agregar}">Agregar
-								Nota</a></li>
-						<li><a href="/mark/list" th:text="#{gestion.notas.ver}">Ver
-								Notas</a></li>
+							href="/mark/add">Agregar
+								Oferta</a></li>
+						<li><a href="/mark/list" >Ver 
+								Ofertas</a></li>
+						<li><a href="/mark/list" >Ver
+								Ofertas Propias</a></li>
 					</ul></li>
 				<li id="users-menu" class="dropdown"
 					sec:authorize="hasRole('ROLE_ADMIN')"><a
 					class="dropdown-toogle" data-toggle="dropdown" href="#"
-					th:text="#{gestion.usuario}"> Gesti贸n de Usuarios <span
+					> Gesti贸n de Usuarios <span
 						class="caret"></span>
 				</a>
 					<ul class="dropdown-menu">
-						<li><a href="/user/add" th:text="#{gestion.usuario.agregar}">Agregar
-								Usuario</a></li>
-						<li><a href="/user/list" th:text="#{gestion.usuario.ver}">Ver
+						<li><a href="/user/list" >Ver
 								Usuarios</a></li>
-					</ul></li>
-				<li id="users-menu" class="dropdown"><a class="dropdown-toogle"
-					data-toggle="dropdown" href="#" th:text="#{gestion.profesor}">
-						Gesti贸n de Profesores <span class="caret"></span>
-				</a>
-					<ul class="dropdown-menu">
-						<li><a sec:authorize="hasRole('ROLE_ADMIN')" href="/professor/add"
-							th:text="#{gestion.profesor.agregar}">Agregar Profesor</a></li>
-						<li><a href="/professor/list"
-							th:text="#{gestion.profesor.ver}">Ver Profesores</a></li>
 					</ul></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
@@ -66,7 +56,7 @@
 					</ul></li>
 				<li sec:authorize="!isAuthenticated()"><a href="/signup"
 					th:text="#{signup.message}"> <span
-						class="glyphicon glyphicon-user"></span> Reg韘trate
+						class="glyphicon glyphicon-user"></span> Reg铆strate
 				</a></li>
 				<li sec:authorize="!isAuthenticated()"><a href="/login"
 					th:text="#{login.message}"> <span
