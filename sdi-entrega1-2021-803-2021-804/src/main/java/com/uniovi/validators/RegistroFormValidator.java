@@ -27,21 +27,21 @@ public class RegistroFormValidator implements Validator{
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "nombre", "Error.empty");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "apellidos", "Error.empty");
 		if (user.getEmail().length() < 5 || user.getEmail().length() > 24) {
-			errors.rejectValue("dni", "Error.signup.email.length");
+			errors.rejectValue("email", "Error.signup.email.length");
 		}
 		if (userService.getUserByEmail(user.getEmail()) != null) {
-			errors.rejectValue("dni", "Error.signup.email.duplicate");
+			errors.rejectValue("email", "Error.signup.email.duplicate");
 		}
 		if (user.getNombre().length() < 5 || user.getNombre().length() > 24) {
-			errors.rejectValue("name", "Error.signup.name.length");
+			errors.rejectValue("nombre", "Error.signup.name.length");
 		}
 		if (user.getApellidos().length() < 5 || user.getApellidos().length() > 24) {
-			errors.rejectValue("lastName", "Error.signup.lastName.length");
+			errors.rejectValue("apellidos", "Error.signup.lastName.length");
 		}
-		if (user.getContraseña().length() < 5 || user.getContraseña().length() > 24) {
+		if (user.getPassword().length() < 5 || user.getPassword().length() > 24) {
 			errors.rejectValue("password", "Error.signup.password.length");
 		}
-		if (!user.getContraseñaRepetida().equals(user.getContraseña())) {
+		if (!user.getPasswordConfirm().equals(user.getPassword())) {
 			errors.rejectValue("passwordConfirm", "Error.signup.passwordConfirm.coincidence");
 		}
 	}

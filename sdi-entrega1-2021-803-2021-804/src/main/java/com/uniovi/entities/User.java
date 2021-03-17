@@ -3,11 +3,16 @@ package com.uniovi.entities;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
+@Entity
+@Table(name = "user")
 public class User {
 	
 	@Id
@@ -15,25 +20,26 @@ public class User {
 	private Long id;
 	private String nombre;
 	private String apellidos;
+	@Column(unique=true)
 	private String email;
 	
 	private String rol;
 
-	private String contraseña;
+	private String password;
 	@Transient // propiedad que no se almacena e la tabla.
-	private String contraseñaRepetida;
+	private String passwordConfirm;
 	
 	private double saldo;
 	
-	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private Set<Oferta> ofertas;
 
-	public User(Long id,String nombre ,String apellidos, String email) {
+	public User(String email,String nombre ,String apellidos) {
 		super();
-		this.id = id;
 		this.nombre=nombre;
 		this.apellidos = apellidos;
 		this.email=email;
+		setSaldo(100);
 	}
 	
 	public User() {
@@ -79,22 +85,6 @@ public class User {
 		this.rol = rol;
 	}
 
-	public String getContraseña() {
-		return contraseña;
-	}
-
-	public void setContraseña(String contraseña) {
-		this.contraseña = contraseña;
-	}
-
-	public String getContraseñaRepetida() {
-		return contraseñaRepetida;
-	}
-
-	public void setContraseñaRepetida(String contraseñaRepetida) {
-		this.contraseñaRepetida = contraseñaRepetida;
-	}
-
 	public double getSaldo() {
 		return saldo;
 	}
@@ -114,10 +104,24 @@ public class User {
 	@Override
 	public String toString() {
 		return "Usuario [id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos + ", email=" + email + ", rol="
-				+ rol + ", contraseña=" + contraseña + ", contraseñaRepetida=" + contraseñaRepetida + ", saldo=" + saldo
+				+ rol + ", contraseña=" + getPassword() + ", contraseñaRepetida=" + getPasswordConfirm() + ", saldo=" + saldo
 				+ ", ofertas=" + ofertas + "]";
 	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 	
-	
+	public String getPasswordConfirm() {
+		return passwordConfirm;
+	}
+
+	public void setPasswordConfirm(String repeatedPassword) {
+		this.passwordConfirm = repeatedPassword;
+	}
 
 }

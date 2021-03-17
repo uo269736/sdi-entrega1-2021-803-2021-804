@@ -10,11 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import com.uniovi.entities.Oferta;
 import com.uniovi.entities.User;
 import com.uniovi.repositories.OfertaRepository;
 
+@Service
 public class OfertaService {
 	@Autowired
 	private HttpSession httpSession;

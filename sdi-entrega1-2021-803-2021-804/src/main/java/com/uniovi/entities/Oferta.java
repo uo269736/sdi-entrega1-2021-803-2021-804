@@ -2,11 +2,13 @@ package com.uniovi.entities;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+@Entity
 public class Oferta {
 	@Id
 	@GeneratedValue
@@ -18,8 +20,7 @@ public class Oferta {
 	private boolean comprada;
 	
 	@ManyToOne
-	@JoinColumn(name = "usuario_id")
-	private User usuario;
+	@JoinColumn(name = "user_id")
 	private User user;
 
 	public Oferta(Long id,String titulo ,String descripcion, Date fechaAlta, double cantidad) {
@@ -83,17 +84,9 @@ public class Oferta {
 	public void setCantidad(double cantidad) {
 		this.cantidad = cantidad;
 	}
-
-	public User getUsuario() {
-		return usuario;
-	}
 	
 	public boolean isComprada() {
 		return comprada;
-	}
-
-	public void setUsuario(User usuario) {
-		this.usuario = usuario;
 	}
 
 	public void setComprada(boolean comprada) {
@@ -113,8 +106,5 @@ public class Oferta {
 		return "Oferta [id=" + id + ", titulo=" + titulo + ", descripcion=" + descripcion + ", fechaAlta=" + fechaAlta
 				+ ", cantidad=" + cantidad + ", usuario=" + user + "]";
 	}
-	
-	
-
 
 }

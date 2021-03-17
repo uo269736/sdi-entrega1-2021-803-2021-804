@@ -70,7 +70,7 @@ public class UserController {
 		}
 		user.setRol(rolesService.getRoles()[0]);
 		userService.addUser(user);
-		securityService.autoLogin(user.getEmail(), user.getContraseñaRepetida());
+		securityService.autoLogin(user.getEmail(), user.getPasswordConfirm());
 		return "redirect:home";
 	}
 
