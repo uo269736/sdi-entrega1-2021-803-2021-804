@@ -1,16 +1,19 @@
 package com.uniovi.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.request.ServletWebRequest;
 
 import com.uniovi.entities.User;
 import com.uniovi.services.RolesService;
@@ -57,6 +60,16 @@ public class UserController {
 		return "redirect:/user/list";
 	}
 	
+	@RequestMapping(value = "/user/delete", method = RequestMethod.POST)
+	public String delete(ServletWebRequest request) {
+		if(request.getParameterValues("idChecked") != null) {
+			for(String idCheck : request.getParameterValues("idChecked")) {
+				userService.deleteUser(Long.valueOf(idCheck));
+			}
+		}
+		return "redirect:/user/list";
+	}
+	
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)
 	public String signup(Model model) {
 		model.addAttribute("user", new User());
@@ -84,6 +97,18 @@ public class UserController {
 	@RequestMapping(value = { "/home" }, method = RequestMethod.GET)
 	public String home(Model model) {
 		return "home";
+	}
+	
+	@PostMapping("/user/list")
+	public String delete(@RequestParam("checkboxeliminar") List<String> idusers){
+
+	    if(idusers != null){
+	        for(String idd : idusers){
+	            Long id = Long.parseLong(idd);
+	            userService.deleteUser(id);
+	         } 
+	    }
+	    return "redirect:/user/list";
 	}
 
 }
