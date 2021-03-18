@@ -1,0 +1,41 @@
+<table class="table table-hover" th:fragment="tableOfertas"
+	id="tableOfertas">
+	<thead>
+		<tr>
+			<th class="col-md-1">id</th>
+			<th>Titulo</th>
+			<th>Cantidad (euros)</th>
+			<th class="col-md-1"></th>
+			<th class="col-md-1"></th>
+			<th class="col-md-1"></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr th:each="oferta : ${ofertaList}">
+			<td th:text="${oferta.id}">1</td>
+			<td th:text="${oferta.titulo}">A</td>
+			<td th:text="${oferta.cantidad}">10</td>
+			<td><a th:href="${'/oferta/details/' + oferta.id}">detalles</a></td>
+			<td>
+				<div th:if="${!oferta.comprada}">
+					<button type="button" th:id="${'buyButton' + oferta.id}" class="btn btn-info">Comprar</button>
+					<script th:inline="javascript">
+						 /*<![CDATA[*/
+						 $( "#buyButton[[${oferta.id}]]" ).click(function() {
+							 $.get( "/oferta/[[${oferta.id}]]/comprar", function( data ) {
+								 var numberPage = [[${param.page}]];
+								 var urlUpdate = '/oferta/list/update';
+								 if ( numberPage != null ){
+								 	urlUpdate += "?page="+numberPage[0];
+								 }
+								 $("#tableOfertas").load(urlUpdate);
+							 });
+						 });
+						 /*]]>*/
+					 </script> 
+				</div>
+			</td>
+			<td th:if="${oferta.comprada}" th:text="Vendido"></td>
+		</tr>
+	</tbody>
+</table>

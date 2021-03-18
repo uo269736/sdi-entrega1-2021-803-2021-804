@@ -12,23 +12,23 @@
 		<div class="collapse navbar-collapse" id="myNavbar">
 			<ul class="nav navbar-nav" sec:authorize="isAuthenticated()">
 				<li><a href="/">Home</a></li>
-				<li id="marks-menu" class="dropdown"><a class="dropdown-toogle"
+				<li id="ofertas-menu" class="dropdown"><a class="dropdown-toogle"
 					data-toggle="dropdown" href="#" >
-						Gestión de Ofertas <span class="caret"></span>
+						Gesti�n de Ofertas <span class="caret"></span>
 				</a><!-- ACORDARSE DE INTERNACIONALIZAR -->
 					<ul class="dropdown-menu">
 						<li sec:authorize="hasRole('ROLE_PROFESSOR')"><a
 							href="/mark/add">Agregar
 								Oferta</a></li>
-						<li><a href="/mark/list" >Ver 
+						<li><a href="/oferta/list" >Ver 
 								Ofertas</a></li>
-						<li><a href="/mark/list" >Ver
-								Ofertas Propias</a></li>
+						<li><a href="/oferta/userlist" >Ver
+								Mis Ofertas</a></li>
 					</ul></li>
 				<li id="users-menu" class="dropdown"
 					sec:authorize="hasRole('ROLE_ADMIN')"><a
 					class="dropdown-toogle" data-toggle="dropdown" href="#"
-					> Gestión de Usuarios <span
+					> Gestion de Usuarios <span
 						class="caret"></span>
 				</a>
 					<ul class="dropdown-menu">

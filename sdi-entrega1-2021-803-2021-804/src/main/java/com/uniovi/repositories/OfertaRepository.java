@@ -2,15 +2,17 @@ package com.uniovi.repositories;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.uniovi.entities.Oferta;
 import com.uniovi.entities.User;
 
 public interface OfertaRepository extends CrudRepository<Oferta, Long>{
-//	@Query("SELECT r FROM Oferta r WHERE (LOWER(r.titulo) LIKE LOWER(?1)")
-//	Page<Oferta> searchByTitulo(Pageable pageable, String searchtext);
+	@Query("SELECT r FROM Oferta r WHERE (LOWER(r.titulo) LIKE LOWER(?1))")
+	Page<Oferta> searchByTitulo(Pageable pageable, String searchtext);
 	
 //	@Query("SELECT r FROM Oferta r WHERE (LOWER(r.titulo) LIKE LOWER(?1) OR LOWER(r.user.nombre) LIKE LOWER(?1)) AND r.user = ?2")
 //	Page<Oferta> searchByTituloAndUser(Pageable pageable, String searchtext);
@@ -25,4 +27,9 @@ public interface OfertaRepository extends CrudRepository<Oferta, Long>{
 	Page<Oferta> findAllByUser(Pageable pageable, User user);
 	
 	Page<Oferta> findAll(Pageable pageable);
+	
+	@Modifying
+	@Transactional
+	@Query("UPDATE Oferta SET comprada = ?1 WHERE id = ?2")
+	void updateComprada(Boolean resend, Long id);
 }

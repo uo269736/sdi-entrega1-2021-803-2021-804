@@ -1,9 +1,15 @@
 package com.uniovi.services;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.annotation.PostConstruct;
 
+import org.apache.catalina.filters.AddDefaultCharsetFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.uniovi.entities.Oferta;
 import com.uniovi.entities.User;
 @Service
 public class InsertSampleDataService {
@@ -16,6 +22,7 @@ public class InsertSampleDataService {
 	
 	@PostConstruct
 	public void init() {
+		//Creacion de usuarios
 		User user1 = new User("UO101010@uniovi.es", "Pedro", "Calvo");
 		user1.setPassword("123456");
 		user1.setRol(rolesService.getRoles()[0]);
@@ -35,6 +42,20 @@ public class InsertSampleDataService {
 		user6.setPassword("admin");
 		user6.setRol(rolesService.getRoles()[1]);
 		
+		//Creacion de ofertas 
+		//(teniendo en cuenta que el constructor Date empieza a contar los años en 1900 y que enero lo cuenta como el mes 0)
+		Oferta ofertaComprada = new Oferta("Esterilla de deporte", "Esterilla de deporte (pilates, yoga, etc) casi sin uso, prácticamente nueva", new Date(121, 2, 17), 6, user1);
+		ofertaComprada.setComprada(true);
+		Set user1Ofertas = new HashSet<Oferta>() {
+			{
+				add(new Oferta("Patinete", "Patinete de segunda mano marca 'Joi'. Una semana de uso", new Date(121, 2, 12), 20, user1));
+				add(new Oferta("Cesta picnic", "Ideal mochila para picnic. Dimensiones: 30x25", new Date(121, 1, 25), 12, user1));
+				add(ofertaComprada);
+			}
+		};
+		user1.setOfertas(user1Ofertas);
+		
+		//Add usuarios
 		usersService.addUser(user1);
 		usersService.addUser(user2);
 		usersService.addUser(user3);

@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.uniovi.entities.Oferta;
@@ -43,6 +45,16 @@ public class OfertaService {
 		return obtainedoferta;
 	}
 	
+	public void setOfertaComprada(boolean revised,Long id){
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String email = auth.getName();
+		Oferta oferta = ofertaRepository.findById(id).get();
+		if(oferta.getUser().getEmail().equals(email) ) {
+			ofertaRepository.updateComprada(revised, id);
+		}
+
+	}
+
 	public Page<Oferta> getOfertasForUser (Pageable pageable, User user){
 		Page<Oferta> ofertas = new PageImpl<Oferta>(new LinkedList<Oferta>());
 		ofertas = ofertaRepository.findAllByUser(pageable, user);
@@ -57,10 +69,10 @@ public class OfertaService {
 	}
 	
 	/*
-	 * Sistema que permita realizar una búsqueda de ofertas por su título
+	 * Sistema que permita realizar una búsqueda de ofertas por su título PARA EL USUARIO DE SUS PROPIAS OFERTAS
 	 * Si la cadena está vacía deberá mostrar un listado completo con todas las ofertas existentes en el sistema
 	 */
-	public Page<Oferta> searchOfertasByTitulo (Pageable pageable, String searchText, User user){
+	public Page<Oferta> searchOfertasByTituloForUser (Pageable pageable, String searchText, User user){
 		Page<Oferta> ofertas = new PageImpl<Oferta>(new LinkedList<Oferta>());
 		if(searchText.isEmpty()) {
 			ofertas = ofertaRepository.findAll(pageable);
@@ -68,6 +80,22 @@ public class OfertaService {
 		else {
 			searchText = "%"+searchText+"%";
 			ofertas = ofertaRepository.searchByDescriptionNameAndUser(pageable, searchText, user);
+		}
+		return ofertas;
+	}
+	
+	/*
+	 * Sistema que permita realizar una búsqueda de ofertas por su título
+	 * Si la cadena está vacía deberá mostrar un listado completo con todas las ofertas existentes en el sistema
+	 */
+	public Page<Oferta> searchOfertasByTitulo(Pageable pageable, String searchText){
+		Page<Oferta> ofertas = new PageImpl<Oferta>(new LinkedList<Oferta>());
+		if(searchText.isEmpty()) {
+			ofertas = ofertaRepository.findAll(pageable);
+		}
+		else {
+			searchText = "%"+searchText+"%";
+			ofertas = ofertaRepository.searchByTitulo(pageable, searchText);
 		}
 		return ofertas;
 	}
