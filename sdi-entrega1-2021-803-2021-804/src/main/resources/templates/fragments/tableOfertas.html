@@ -25,11 +25,15 @@
 						 $( "#buyButton[[${oferta.id}]]" ).click(function() {
 							 $.get( "/oferta/[[${oferta.id}]]/comprar", function( data ) {
 								 var numberPage = [[${param.page}]];
-								 var urlUpdate = '/oferta/list/update';
+								 var urlUpdate = '/oferta/list';
 								 if ( numberPage != null ){
 								 	urlUpdate += "?page="+numberPage[0];
 								 }						 
 								 $("#lista").load(urlUpdate);
+								 location.reload();
+								 if([[${oferta.cantidad}]] > [[${session.usuario.saldo}]]){
+									 alert("Error al realizar la compra, saldo insuficiente.");
+								 }
 							 });
 						 });
 						 /*]]>*/
