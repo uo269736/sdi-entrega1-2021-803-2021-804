@@ -53,17 +53,17 @@ public class UserService {
 	public User getUserByEmail(String email) {
 		return usersRepository.findByEmail(email);
 	}
-	
-	public User getUserAuthenticated() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user=getUserByEmail(auth.getName());
-		return user;
-	}
 
 	public void realizaPago(double cantidad, Long idComprador, Long idVendedor) {
 		// Actualizamos el saldo tanto del comprador como del vendedor
 		usersRepository.updateSaldoOfertaComprada(idComprador, cantidad);
 		usersRepository.updateSaldoOfertaVendida(idVendedor, cantidad);
 	}
+	
+	public User getUserAuthenticated() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user=getUserByEmail(auth.getName());
+        return user;
+    }
 
 }
