@@ -33,7 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/user/list/*").hasAnyAuthority("ROLE_ADMIN")
 				.antMatchers("/user/delete/*").hasAnyAuthority("ROLE_ADMIN")
 				.anyRequest().authenticated().and().formLogin()
-				.loginPage("/login").permitAll().defaultSuccessUrl("/home").and().logout().permitAll();
+				.loginPage("/login").permitAll().defaultSuccessUrl("/home", true).and().logout().permitAll();
 	}
 
 	@Autowired

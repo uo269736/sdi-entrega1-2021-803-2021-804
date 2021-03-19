@@ -2,7 +2,11 @@ package com.uniovi.controllers;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -35,6 +39,9 @@ public class UserController {
 	
 	@Autowired
 	private RegistroFormValidator registroFormValidator;
+	
+	@Autowired
+	private HttpSession httpSession;
 
 	@RequestMapping("/user/list")
 	public String getListado(Model model) {
@@ -96,6 +103,10 @@ public class UserController {
 	
 	@RequestMapping(value = { "/home" }, method = RequestMethod.GET)
 	public String home(Model model) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User u= userService.getUserByEmail(auth.getName());
+		model.addAttribute("usuario", u);
+		httpSession.setAttribute("usuario", u);
 		return "home";
 	}
 	
