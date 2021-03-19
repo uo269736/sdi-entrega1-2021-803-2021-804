@@ -29,9 +29,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().disable().authorizeRequests()
 				.antMatchers("/css/**", "/img/**", "/script/**", "/", "/signup", "/login/**").permitAll()
 				.antMatchers("/oferta/add").hasAuthority("ROLE_USUARIO")
-				.antMatchers("/oferta/delete/*").hasAnyAuthority("ROLE_USUARIO","ROLE_ADMIN")
-				.antMatchers("/user/list/*").hasAnyAuthority("ROLE_ADMIN")
-				.antMatchers("/user/delete/*").hasAnyAuthority("ROLE_ADMIN")
+				.antMatchers("/oferta/delete").hasAuthority("ROLE_USUARIO")
+				.antMatchers("/oferta/delete/*").hasAuthority("ROLE_USUARIO")
+				.antMatchers("/user/list").hasAuthority("ROLE_ADMIN")
+				.antMatchers("/user/list/*").hasAuthority("ROLE_ADMIN")
+				.antMatchers("/user/delete").hasAuthority("ROLE_ADMIN")
+				.antMatchers("/user/delete/*").hasAuthority("ROLE_ADMIN")
 				.anyRequest().authenticated().and().formLogin()
 				.loginPage("/login").permitAll().defaultSuccessUrl("/home", true).and().logout().permitAll();
 	}

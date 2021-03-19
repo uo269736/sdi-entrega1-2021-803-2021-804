@@ -11,6 +11,7 @@ import com.uniovi.entities.Oferta;
 import com.uniovi.entities.User;
 
 public interface OfertaRepository extends CrudRepository<Oferta, Long>{
+	
 	@Query("SELECT r FROM Oferta r WHERE (LOWER(r.titulo) LIKE LOWER(?1))")
 	Page<Oferta> searchByTitulo(Pageable pageable, String searchtext);
 	

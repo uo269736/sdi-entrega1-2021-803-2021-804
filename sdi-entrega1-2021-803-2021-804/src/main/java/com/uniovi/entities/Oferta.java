@@ -1,6 +1,8 @@
 package com.uniovi.entities;
 
-import java.util.Date;
+
+
+import java.sql.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -40,6 +42,7 @@ public class Oferta {
 		this.fechaAlta=fechaAlta;
 		this.cantidad = cantidad;
 		this.user=usuario;
+		setComprada(false);
 	}
 	
 	public Oferta() {

@@ -20,7 +20,7 @@
 				<label class="control-label col-sm-2" for="nombre" th:text="#{signup.name}">Nombre:</label>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" name="nombre"
-						placeholder="Ejemplo: Juan" required="true" /><span
+						placeholder="Ejemplo: Manolo" required="true" /><span
 						class="text-danger" th:if="${#fields.hasErrors('nombre')}"
 						th:errors="*{nombre}" />
 				</div>
@@ -29,7 +29,7 @@
 				<label class="control-label col-sm-2" for="apellidos" th:text="#{signup.lastname}">Apellidos:</label>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" name="apellidos"
-						placeholder="Ejemplo: P�rezz Almonte" required="true" /><span
+						placeholder="Ejemplo: Fernández García" required="true" /><span
 						class="text-danger" th:if="${#fields.hasErrors('apellidos')}"
 						th:errors="*{apellidos}" />
 						

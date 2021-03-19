@@ -18,13 +18,14 @@
 			<td><a th:href="${'/oferta/details/' + oferta.id}">detalles</a></td>
 			<td>
 				<div th:if="${!oferta.comprada}">
+					<div th:if="${!(oferta.user.id==session.usuario.id)}">
 					<button type="button" th:id="${'buyButton' + oferta.id}" class="btn btn-info">Comprar</button>
 					<script th:inline="javascript">
 						 /*<![CDATA[*/
 						 $( "#buyButton[[${oferta.id}]]" ).click(function() {
 							 $.get( "/oferta/[[${oferta.id}]]/comprar", function( data ) {
 								 var numberPage = [[${param.page}]];
-								 var urlUpdate = '/oferta/list';
+								 var urlUpdate = '/oferta/list/update';
 								 if ( numberPage != null ){
 								 	urlUpdate += "?page="+numberPage[0];
 								 }						 
@@ -33,6 +34,7 @@
 						 });
 						 /*]]>*/
 					 </script> 
+					 </div>
 				</div>
 			</td>
 			<td th:if="${oferta.comprada}" th:text="Vendido"></td>
