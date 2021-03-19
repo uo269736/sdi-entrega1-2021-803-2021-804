@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -44,6 +46,7 @@ public class OfertaController {
 		}
 		model.addAttribute("ofertaList", ofertas.getContent());
 		model.addAttribute("page", ofertas);
+		httpSession.setAttribute("usuario", userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName()));
 		return "oferta/list";
 
 	}
@@ -106,11 +109,12 @@ public class OfertaController {
 		//Por ello, usamos getOfertas. Queremos TODAS las ofertas
 		Page<Oferta> ofertas = ofertaService.getOfertas(pageable);
 		model.addAttribute("ofertaList", ofertas.getContent());
+		httpSession.setAttribute("usuario", userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName()));
 		return "oferta/list :: tableOfertas";
 	}
 	
 	@RequestMapping(value="/oferta/{id}/comprar", method=RequestMethod.GET)
-	public String setResendTrue(Model model, @PathVariable Long id){
+	public String setCompra(Model model, @PathVariable Long id){
 		ofertaService.setOfertaComprada(true, id);
 		return "redirect:/oferta/list";
 	}

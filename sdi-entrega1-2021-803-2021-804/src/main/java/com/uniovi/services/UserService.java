@@ -52,4 +52,9 @@ public class UserService {
 		return usersRepository.findByEmail(email);
 	}
 
+	public void realizaPago(double cantidad, Long idComprador,Long idVendedor) {
+		//Actualizamos el saldo tanto del comprador como del vendedor
+		usersRepository.updateSaldoOfertaComprada(idComprador, cantidad);
+		usersRepository.updateSaldoOfertaVendida(idVendedor, cantidad);
+	}
 }
