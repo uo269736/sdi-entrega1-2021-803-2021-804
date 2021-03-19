@@ -1,11 +1,10 @@
 package com.uniovi.services;
-import java.util.Date;
+import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.catalina.filters.AddDefaultCharsetFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +48,7 @@ public class InsertSampleDataService {
 		Set user1Ofertas = new HashSet<Oferta>() {
 			{
 				add(new Oferta("Patinete", "Patinete de segunda mano marca 'Joi'. Una semana de uso", new Date(121, 2, 12), 20, user1));
-				add(new Oferta("Cesta picnic", "Ideal mochila para picnic. Dimensiones: 30x25", new Date(121, 1, 25), 12, user1));
+				add(new Oferta("Cesta picnic", "Ideal mochila para picnic. Dimensiones: 30x25", new Date(121, 2, 12), 12, user1));
 				add(ofertaComprada);
 			}
 		};

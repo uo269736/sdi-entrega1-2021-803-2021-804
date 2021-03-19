@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +22,6 @@ public class UserService {
 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	
-	@Autowired
-	private HttpSession httpSession;
 	
 	@PostConstruct
 	public void init() {
@@ -50,6 +48,12 @@ public class UserService {
 	
 	public User getUserByEmail(String email) {
 		return usersRepository.findByEmail(email);
+	}
+	
+	public User getUserAuthenticated() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user=getUserByEmail(auth.getName());
+		return user;
 	}
 
 }

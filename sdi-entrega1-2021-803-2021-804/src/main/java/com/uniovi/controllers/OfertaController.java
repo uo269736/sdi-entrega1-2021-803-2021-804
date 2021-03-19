@@ -1,6 +1,8 @@
 package com.uniovi.controllers;
 
 import java.security.Principal;
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.LinkedList;
 
 import javax.servlet.http.HttpSession;
@@ -22,6 +24,7 @@ import com.uniovi.entities.Oferta;
 import com.uniovi.entities.User;
 import com.uniovi.services.OfertaService;
 import com.uniovi.services.UserService;
+import com.uniovi.validators.OfertaAddFormValidator;
 
 @Controller
 public class OfertaController {
@@ -33,6 +36,9 @@ public class OfertaController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private OfertaAddFormValidator ofertaAddFormValidator;
 	
 	@RequestMapping("/oferta/list")
 	public String getList(Model model, Pageable pageable, Principal principal, @RequestParam(value = "", required=false) String searchText){
@@ -65,19 +71,20 @@ public class OfertaController {
 	}
 	
 	@RequestMapping(value="/oferta/add", method=RequestMethod.GET )
-	public String setOferta(Model model){
+	public String getOferta(Model model){
 		model.addAttribute("oferta", new Oferta());
-		model.addAttribute("usersList", userService.getUsers());
 		return "oferta/add";
 	}
 	
 	@RequestMapping(value="/oferta/add", method=RequestMethod.POST )
 	public String setOferta(Model model,@Validated Oferta oferta, BindingResult result){
+		ofertaAddFormValidator.validate(oferta, result);
 		model.addAttribute("usersList", userService.getUsers());
 		if(result.hasErrors()) {
 			return "oferta/add";
 		}
-		
+		oferta.setFechaAlta(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
+		oferta.setUser(userService.getUserAuthenticated());
 		ofertaService.addOferta(oferta);
 		return "redirect:/oferta/list";
 	}
@@ -92,12 +99,6 @@ public class OfertaController {
 	public String deleteOferta(@PathVariable Long id){
 		ofertaService.deleteOferta(id);
 		return "redirect:/oferta/list";
-	}
-	
-	@RequestMapping(value="/oferta/add")
-	public String getOferta(Model model) {
-		model.addAttribute("usersList", userService.getUsers());
-		return "oferta/add";
 	}
 
 	@RequestMapping("/oferta/list/update")
