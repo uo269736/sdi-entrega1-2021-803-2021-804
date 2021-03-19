@@ -24,11 +24,11 @@
 						 $( "#buyButton[[${oferta.id}]]" ).click(function() {
 							 $.get( "/oferta/[[${oferta.id}]]/comprar", function( data ) {
 								 var numberPage = [[${param.page}]];
-								 var urlUpdate = '/oferta/list';
+								 var urlUpdate = '/oferta/list/update';
 								 if ( numberPage != null ){
 								 	urlUpdate += "?page="+numberPage[0];
 								 }
-								 $("#lista").load(urlUpdate);
+								 $("#tableOfertas").load(urlUpdate);
 							 });
 						 });
 						 /*]]>*/

@@ -7,6 +7,8 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,10 +23,10 @@ public class UserService {
 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	
+
 	@Autowired
 	private HttpSession httpSession;
-	
+
 	@PostConstruct
 	public void init() {
 	}
@@ -34,7 +36,7 @@ public class UserService {
 		usersRepository.findAll().forEach(users::add);
 		return users;
 	}
-	
+
 	public User getUser(Long id) {
 		return usersRepository.findById(id).get();
 	}
@@ -47,14 +49,20 @@ public class UserService {
 	public void deleteUser(Long id) {
 		usersRepository.deleteById(id);
 	}
-	
+
 	public User getUserByEmail(String email) {
 		return usersRepository.findByEmail(email);
 	}
 
-	public void realizaPago(double cantidad, Long idComprador,Long idVendedor) {
-		//Actualizamos el saldo tanto del comprador como del vendedor
+	public void realizaPago(double cantidad, Long idComprador, Long idVendedor) {
+		// Actualizamos el saldo tanto del comprador como del vendedor
 		usersRepository.updateSaldoOfertaComprada(idComprador, cantidad);
 		usersRepository.updateSaldoOfertaVendida(idVendedor, cantidad);
+	}
+
+	public User getUserAuthenticated() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = getUserByEmail(auth.getName());
+		return user;
 	}
 }
