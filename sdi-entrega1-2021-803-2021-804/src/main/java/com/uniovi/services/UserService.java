@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -22,14 +23,10 @@ public class UserService {
 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
-<<<<<<< HEAD
-	
-=======
 
 	@Autowired
 	private HttpSession httpSession;
 
->>>>>>> refs/heads/master
 	@PostConstruct
 	public void init() {
 	}
