@@ -18,6 +18,7 @@
 			<td><a th:href="${'/oferta/details/' + oferta.id}">detalles</a></td>
 			<td>
 				<div th:if="${!oferta.comprada}">
+					<div th:if="${!(oferta.user.id==session.usuario.id)}">
 					<button type="button" th:id="${'buyButton' + oferta.id}" class="btn btn-info">Comprar</button>
 					<script th:inline="javascript">
 						 /*<![CDATA[*/
@@ -33,6 +34,7 @@
 						 });
 						 /*]]>*/
 					 </script> 
+					 </div>
 				</div>
 			</td>
 			<td th:if="${oferta.comprada}" th:text="Vendido"></td>
