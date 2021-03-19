@@ -26,6 +26,9 @@ public class OfertaService {
 	@Autowired
 	private OfertaRepository ofertaRepository; 
 	
+	@Autowired
+	private UserService userService;
+	
 	public void addOferta(Oferta oferta){
 		// Si en Id es null le asignamos el ultimo + 1 de la lista
 		ofertaRepository.save(oferta);
@@ -49,8 +52,11 @@ public class OfertaService {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String email = auth.getName();
 		Oferta oferta = ofertaRepository.findById(id).get();
-		if(oferta.getUser().getEmail().equals(email) ) {
+		User usuario = userService.getUserByEmail(email);
+
+		if(oferta.getCantidad() <= usuario.getSaldo()) {
 			ofertaRepository.updateComprada(revised, id);
+			userService.realizaPago(oferta.getCantidad(), usuario.getId(), oferta.getUser().getId());
 		}
 
 	}

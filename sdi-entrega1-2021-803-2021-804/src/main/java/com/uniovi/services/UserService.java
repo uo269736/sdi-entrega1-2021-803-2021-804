@@ -22,7 +22,14 @@ public class UserService {
 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
+<<<<<<< HEAD
 	
+=======
+
+	@Autowired
+	private HttpSession httpSession;
+
+>>>>>>> refs/heads/master
 	@PostConstruct
 	public void init() {
 	}
@@ -32,7 +39,7 @@ public class UserService {
 		usersRepository.findAll().forEach(users::add);
 		return users;
 	}
-	
+
 	public User getUser(Long id) {
 		return usersRepository.findById(id).get();
 	}
@@ -45,7 +52,7 @@ public class UserService {
 	public void deleteUser(Long id) {
 		usersRepository.deleteById(id);
 	}
-	
+
 	public User getUserByEmail(String email) {
 		return usersRepository.findByEmail(email);
 	}
@@ -54,6 +61,12 @@ public class UserService {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user=getUserByEmail(auth.getName());
 		return user;
+	}
+
+	public void realizaPago(double cantidad, Long idComprador, Long idVendedor) {
+		// Actualizamos el saldo tanto del comprador como del vendedor
+		usersRepository.updateSaldoOfertaComprada(idComprador, cantidad);
+		usersRepository.updateSaldoOfertaVendida(idVendedor, cantidad);
 	}
 
 }
