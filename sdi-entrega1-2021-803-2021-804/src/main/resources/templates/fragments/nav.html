@@ -14,33 +14,33 @@
 				<li><a href="/">Home</a></li>
 				<li id="ofertas-menu" class="dropdown"
 				sec:authorize="hasRole('ROLE_USUARIO')"><a class="dropdown-toogle"
-					data-toggle="dropdown" href="#" >
-						Gesti�n de Ofertas <span class="caret"></span>
-				</a><!-- ACORDARSE DE INTERNACIONALIZAR -->
+					data-toggle="dropdown" href="#" th:text="#{gestion.ofertas}">
+						Gestion de Ofertas <span class="caret"></span>
+				</a>
 					<ul class="dropdown-menu">
-						<li><a href="/oferta/add">Agregar
+						<li><a href="/oferta/add" th:text="#{gestion.ofertas.agregar}">Agregar
 								Oferta</a></li>
-						<li><a href="/oferta/list" >Ver 
+						<li><a href="/oferta/list" th:text="#{gestion.ofertas.ver}">Ver 
 								Ofertas</a></li>
-						<li><a href="/oferta/userlist" >Ver
+						<li><a href="/oferta/userlist" th:text="#{gestion.ofertas.ver.propias}">Ver
 								Mis Ofertas</a></li>
-						<li><a href="/oferta/userlistcompradas" >Ver
+						<li><a href="/oferta/userlistcompradas" th:text="#{gestion.ofertas.ver.compras}">Ver
 								Mis Compras</a></li>
 					</ul></li>
 				<li id="users-menu" class="dropdown"
 					sec:authorize="hasRole('ROLE_ADMIN')"><a
 					class="dropdown-toogle" data-toggle="dropdown" href="#"
-					> Gestion de Usuarios <span
+					th:text="#{gestion.usuario}"> Gestion de Usuarios <span
 						class="caret"></span>
 				</a>
 					<ul class="dropdown-menu">
-						<li><a href="/user/list" >Ver
+						<li><a href="/user/list" th:text="#{gestion.usuario.ver}">Ver
 								Usuarios</a></li>
 					</ul></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li id="saldo" sec:authorize="isAuthenticated()"><a
-					th:text="${'Saldo: '+session.usuario.saldo+'€'}"> 
+					th:text="#{nav.saldo} + ${session.usuario.saldo+'€'}"> 
 				</a></li>
 				<li sec:authorize="isAuthenticated()"><a
 				sec:authentication="principal.username"
@@ -71,7 +71,8 @@
 					th:text="#{login.message}"> <span
 						class="glyphicon glyphicon-log-in"></span> Identifícate
 				</a></li>
-				<li sec:authorize="isAuthenticated()"><a href="/logout"> <span
+				<li sec:authorize="isAuthenticated()"><a href="/logout"
+					th:text="#{logout.message}"> <span 
 						class="glyphicon glyphicon-log-out"></span> Desconectar
 				</a></li>
 			</ul>
