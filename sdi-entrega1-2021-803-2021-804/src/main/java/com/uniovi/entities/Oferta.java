@@ -50,6 +50,17 @@ public class Oferta {
 		this.userComprador=null;
 	}
 	
+	public Oferta(String titulo ,String descripcion, Date fechaAlta, double cantidad, User usuario,User comprador) {
+		super();
+		this.titulo=titulo;
+		this.descripcion = descripcion;
+		this.fechaAlta=fechaAlta;
+		this.cantidad = cantidad;
+		this.user=usuario;
+		setComprada(true);
+		this.userComprador=comprador;
+	}
+	
 	public Oferta() {
 	}
 

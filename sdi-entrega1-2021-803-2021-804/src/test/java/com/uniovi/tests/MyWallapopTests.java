@@ -1,21 +1,41 @@
-package com.uniovi;
+package com.uniovi.tests;
 
 import org.junit.After;
-import org.junit.Before;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.uniovi.repositories.UserRepository;
+import com.uniovi.services.RolesService;
+import com.uniovi.services.UserService;
+import com.uniovi.tests.pageobjects.PO_HomeView;
+import com.uniovi.tests.pageobjects.PO_RegisterView;
+import com.uniovi.tests.pageobjects.PO_View;
+import com.uniovi.tests.util.SeleniumUtils;
 
 //Ordenamos las pruebas por el nombre del método
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 
-@SpringBootTest
-public class SdiEntrega120218032021804ApplicationTests {
+public class MyWallapopTests {
+	//Reinicio de base de datos
+	@Autowired
+	private UserService usersService;
+	@Autowired
+	private RolesService rolesService;
+	@Autowired
+	private UserRepository usersRepository;
+	
+	public void initdb() {
+		//Borramos todas las entidades
+		usersRepository.deleteAll();
+		//Ahora las volvemos a crear
+	}
 
 	// En Windows (Debe ser la versión 65.0.1 y desactivar las actualizacioens
 	// automáticas)):
@@ -29,7 +49,7 @@ public class SdiEntrega120218032021804ApplicationTests {
 //  static String Geckdriver024 = "C:\\Users\\MiguelUni\\Desktop\\TrabajoUniversidadMiguel\\Tercero\\SDI\\Sesion 5\\PL-SDI-Sesión5-material\\geckodriver024win64.exe";
 
 	static WebDriver driver = getDriver(PathFirefox65, Geckdriver024);
-	static String URL = "http://localhost:8090";
+	static String URL = "http://localhost:8080";
 
 	public static WebDriver getDriver(String PathFirefox, String Geckdriver) {
 		System.setProperty("webdriver.firefox.bin", PathFirefox);
@@ -41,6 +61,7 @@ public class SdiEntrega120218032021804ApplicationTests {
 	// Antes de cada prueba se navega al URL home de la aplicación
 	@Before
 	public void setUp() {
+		initdb();
 		driver.navigate().to(URL);
 	}
 
@@ -62,38 +83,55 @@ public class SdiEntrega120218032021804ApplicationTests {
 		driver.quit();
 	}
 
-	@Test
-	void contextLoads() {
-	}
-
 	// [Prueba1] Registro de Usuario con datos válidos.
 	@Test
 	public void Prueba1() {
-
+		// Vamos al formulario de registro
+		PO_HomeView.clickOption(driver, "signup", "class", "btn btn-primary");
+		// Rellenamos el formulario.
+		PO_RegisterView.fillForm(driver, "a@email.com", "Josefo", "Perez", "123456", "123456");
+		// Comprobamos que entramos en la sección privada
+		PO_View.checkElement(driver, "text", "a@email.com");
 	}
 
 	// [Prueba2] Registro de Usuario con datos inválidos (email vacío, nombre vacío, apellidos vacíos).
 	@Test
 	public void Prueba2() {
-
+		// Vamos al formulario de registro
+		PO_HomeView.clickOption(driver, "signup", "class", "btn btn-primary");
+		// Rellenamos el formulario.
+		PO_RegisterView.fillForm(driver, "", "", "", "123456", "123456");
+		// Comprobamos que no cambiamos de página y que no sale mensaje de error
+		PO_View.checkElement(driver, "text", "Regístrate como usuario");
+		SeleniumUtils.textoNoPresentePagina(driver, "debe");
 	}
 
 	// [Prueba3] Registro de Usuario con datos inválidos (repetición de contraseña inválida).
 	@Test
 	public void Prueba3() {
-
+		// Vamos al formulario de registro
+		PO_HomeView.clickOption(driver, "signup", "class", "btn btn-primary");
+		// Rellenamos el formulario.
+		PO_RegisterView.fillForm(driver, "a@email.com", "Josefo", "Perez", "123456", "456");
+		// Comprobamos que no cambiamos de página y que sale el mensaje de error de las contraseñas
+		PO_View.checkElement(driver, "text", "Las contraseñas no coinciden");
 	}
 
 	// [Prueba4] Registro de Usuario con datos inválidos (email existente).
 	@Test
 	public void Prueba4() {
-
+		// Vamos al formulario de registro
+		PO_HomeView.clickOption(driver, "signup", "class", "btn btn-primary");
+		// Rellenamos el formulario.
+		PO_RegisterView.fillForm(driver, "admin@email.com", "Josefo", "Perez", "123456", "456");
+		// Comprobamos que no cambiamos de página y que sale el mensaje de error de las contraseñas
+		PO_View.checkElement(driver, "text", "Este email ya existe");
 	}
 
 	// [Prueba5] Inicio de sesión con datos válidos (administrador).
 	@Test
 	public void Prueba5() {
-
+		
 	}
 
 	// [Prueba6] Inicio de sesión con datos válidos (usuario estándar).
