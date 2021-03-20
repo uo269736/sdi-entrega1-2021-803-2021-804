@@ -54,11 +54,15 @@ public class OfertaService {
 		Oferta oferta = ofertaRepository.findById(id).get();
 		User usuario = userService.getUserByEmail(email);
 
+		realizaCompra(revised, oferta, usuario);
+	}
+	
+	public void realizaCompra(boolean revised,Oferta oferta, User usuario){
 		if(!oferta.isComprada()) {
 			if(oferta.getCantidad() <= usuario.getSaldo()) {
-				oferta.setUserComprador(usuario);
+				oferta.setComprador(usuario);
 				ofertaRepository.save(oferta);
-				ofertaRepository.updateComprada(revised, id);
+				ofertaRepository.updateComprada(revised, oferta.getId());
 				userService.realizaPago(oferta.getCantidad(), usuario.getId(), oferta.getUser().getId());
 			}
 		}	

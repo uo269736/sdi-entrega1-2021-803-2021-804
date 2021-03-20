@@ -35,10 +35,10 @@ public class User {
 	private double saldo;
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	private Set<Oferta> ofertas;
+	private Set<Oferta> ofertas = new HashSet<Oferta>();
 	
-	@OneToMany(mappedBy = "userComprador", cascade = CascadeType.ALL)
-	private Set<Oferta> ofertasCompradas;
+	@OneToMany(mappedBy = "comprador", cascade = CascadeType.ALL)
+	private Set<Oferta> ofertasCompradas = new HashSet<Oferta>();
 
 	public User(String email,String nombre ,String apellidos) {
 		super();

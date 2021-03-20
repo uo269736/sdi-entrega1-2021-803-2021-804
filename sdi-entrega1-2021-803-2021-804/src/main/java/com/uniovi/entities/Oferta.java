@@ -26,8 +26,8 @@ public class Oferta {
 	private User user;
 	
 	@ManyToOne
-	@JoinColumn(name = "userComprador_id")
-	private User userComprador;
+	@JoinColumn(name = "comprador_id", nullable=true)
+	private User comprador;
 
 	public Oferta(Long id,String titulo ,String descripcion, Date fechaAlta, double cantidad) {
 		super();
@@ -47,18 +47,6 @@ public class Oferta {
 		this.cantidad = cantidad;
 		this.user=usuario;
 		setComprada(false);
-		this.userComprador=null;
-	}
-	
-	public Oferta(String titulo ,String descripcion, Date fechaAlta, double cantidad, User usuario,User comprador) {
-		super();
-		this.titulo=titulo;
-		this.descripcion = descripcion;
-		this.fechaAlta=fechaAlta;
-		this.cantidad = cantidad;
-		this.user=usuario;
-		setComprada(true);
-		this.userComprador=comprador;
 	}
 	
 	public Oferta() {
@@ -120,19 +108,19 @@ public class Oferta {
 		this.user = user;
 	}
 	
-	public User getUserComprador() {
-		return userComprador;
+	public User getComprador() {
+		return comprador;
 	}
 
-	public void setUserComprador(User user) {
-		this.userComprador = user;
+	public void setComprador(User user) {
+		this.comprador = user;
 	}
 
 	@Override
 	public String toString() {
 		return "Oferta [id=" + id + ", titulo=" + titulo + ", descripcion=" + descripcion + ", fechaAlta=" + fechaAlta
 				+ ", cantidad=" + cantidad + ", comprada=" + comprada + ", user=" + user + ", userComprador="
-				+ userComprador + "]";
+				+ comprador + "]";
 	}
 	
 }
