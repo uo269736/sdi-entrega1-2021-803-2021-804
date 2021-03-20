@@ -12,9 +12,10 @@
 		<div class="collapse navbar-collapse" id="myNavbar">
 			<ul class="nav navbar-nav" sec:authorize="isAuthenticated()">
 				<li><a href="/">Home</a></li>
-				<li id="ofertas-menu" class="dropdown"><a class="dropdown-toogle"
+				<li id="ofertas-menu" class="dropdown"
+				sec:authorize="hasRole('ROLE_USUARIO')"><a class="dropdown-toogle"
 					data-toggle="dropdown" href="#" >
-						Gestión de Ofertas <span class="caret"></span>
+						Gestiï¿½n de Ofertas <span class="caret"></span>
 				</a><!-- ACORDARSE DE INTERNACIONALIZAR -->
 					<ul class="dropdown-menu">
 						<li><a href="/oferta/add">Agregar
@@ -23,6 +24,8 @@
 								Ofertas</a></li>
 						<li><a href="/oferta/userlist" >Ver
 								Mis Ofertas</a></li>
+						<li><a href="/oferta/userlistcompradas" >Ver
+								Mis Compras</a></li>
 					</ul></li>
 				<li id="users-menu" class="dropdown"
 					sec:authorize="hasRole('ROLE_ADMIN')"><a
@@ -37,7 +40,7 @@
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li id="saldo" sec:authorize="isAuthenticated()"><a
-					th:text="${session.usuario.saldo}"> 
+					th:text="${'Saldo: '+session.usuario.saldo+'â‚¬'}"> 
 				</a></li>
 				<li sec:authorize="isAuthenticated()"><a
 				sec:authentication="principal.username"

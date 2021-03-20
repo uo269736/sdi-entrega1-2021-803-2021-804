@@ -39,6 +39,7 @@
 					<th>Cantidad (euros)</th>
 					<th class="col-md-1"></th>
 					<th class="col-md-1"></th>
+					<th class="col-md-1"></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -47,6 +48,7 @@
 					<td th:text="${oferta.titulo}">A</td>
 					<td th:text="${oferta.cantidad}">10</td>
 					<td><a th:href="${'/oferta/details/' + oferta.id}">detalles</a></td>
+					<td><a th:href="${'/oferta/delete/' + oferta.id}">eliminar</a></td>
 				</tr>
 			</tbody>
 		</table>

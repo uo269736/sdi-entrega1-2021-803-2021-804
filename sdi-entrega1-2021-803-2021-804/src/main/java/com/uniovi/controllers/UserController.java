@@ -89,6 +89,7 @@ public class UserController {
 			return "signup";
 		}
 		user.setRol(rolesService.getRoles()[0]);
+		user.setSaldo(100);
 		userService.addUser(user);
 		securityService.autoLogin(user.getEmail(), user.getPasswordConfirm());
 		return "redirect:home";

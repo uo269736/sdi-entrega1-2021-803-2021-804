@@ -1,5 +1,7 @@
 package com.uniovi.entities;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -33,6 +35,9 @@ public class User {
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private Set<Oferta> ofertas;
+	
+	@OneToMany(mappedBy = "userComprador", cascade = CascadeType.ALL)
+	private Set<Oferta> ofertasCompradas;
 
 	public User(String email,String nombre ,String apellidos) {
 		super();
@@ -103,9 +108,9 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "Usuario [id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos + ", email=" + email + ", rol="
-				+ rol + ", contraseña=" + getPassword() + ", contraseñaRepetida=" + getPasswordConfirm() + ", saldo=" + saldo
-				+ ", ofertas=" + ofertas + "]";
+		return "User [id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos + ", email=" + email + ", rol="
+				+ rol + ", password=" + password + ", passwordConfirm=" + passwordConfirm + ", saldo=" + saldo
+				+ ", ofertas=" + ofertas + ", ofertasCompradas=" + ofertasCompradas + "]";
 	}
 
 	public String getPassword() {
@@ -122,6 +127,14 @@ public class User {
 
 	public void setPasswordConfirm(String repeatedPassword) {
 		this.passwordConfirm = repeatedPassword;
+	}
+	
+	public Set<Oferta> getOfertasCompradas() {
+		return ofertasCompradas;
+	}
+
+	public void setOfertasCompradas (Set<Oferta> ofertasCompradas) {
+		this.ofertasCompradas = ofertasCompradas;
 	}
 
 }

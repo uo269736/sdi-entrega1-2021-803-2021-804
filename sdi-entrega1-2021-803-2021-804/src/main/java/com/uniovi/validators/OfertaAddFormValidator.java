@@ -24,7 +24,7 @@ public class OfertaAddFormValidator implements Validator {
 			errors.rejectValue("descripcion", "Error.oferta.descripcion.length");
 		}
 		if (oferta.getCantidad() < 0) {
-			errors.rejectValue("cantidad", "Error.notas.agregar.score.minmax");
+			errors.rejectValue("cantidad", "Error.oferta.cantidad.negativa");
 		}
 		
 	}

@@ -54,11 +54,14 @@ public class OfertaService {
 		Oferta oferta = ofertaRepository.findById(id).get();
 		User usuario = userService.getUserByEmail(email);
 
-		if(oferta.getCantidad() <= usuario.getSaldo()) {
-			ofertaRepository.updateComprada(revised, id);
-			userService.realizaPago(oferta.getCantidad(), usuario.getId(), oferta.getUser().getId());
-		}
-
+		if(!oferta.isComprada()) {
+			if(oferta.getCantidad() <= usuario.getSaldo()) {
+				oferta.setUserComprador(usuario);
+				ofertaRepository.save(oferta);
+				ofertaRepository.updateComprada(revised, id);
+				userService.realizaPago(oferta.getCantidad(), usuario.getId(), oferta.getUser().getId());
+			}
+		}	
 	}
 
 	public Page<Oferta> getOfertasForUser (Pageable pageable, User user){
@@ -110,4 +113,6 @@ public class OfertaService {
 		Page<Oferta> ofertas = ofertaRepository.findAll(pageable);
 		return ofertas;
 	}
+	
+	
 }
