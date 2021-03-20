@@ -2,9 +2,9 @@
 	id="tableOfertas">
 	<thead>
 		<tr>
-			<th class="col-md-1">id</th>
-			<th>Titulo</th>
-			<th>Cantidad (euros)</th>
+			<th th:text="#{oferta.id}" class="col-md-1">id</th>
+			<th th:text="#{oferta.titulo}">Titulo</th>
+			<th th:text="#{oferta.cantidad}">Cantidad (euros)</th>
 			<th class="col-md-1"></th>
 			<th class="col-md-1"></th>
 			<th class="col-md-1"></th>
@@ -15,11 +15,11 @@
 			<td th:text="${oferta.id}">1</td>
 			<td th:text="${oferta.titulo}">A</td>
 			<td th:text="${oferta.cantidad}">10</td>
-			<td><a th:href="${'/oferta/details/' + oferta.id}">detalles</a></td>
+			<td><a th:href="${'/oferta/details/' + oferta.id}" th:text="#{oferta.detalles}">detalles</a></td>
 			<td>
 				<div th:if="${!oferta.comprada}">
 					<div th:if="${!(oferta.user.id==session.usuario.id)}">
-					<button type="button" th:id="${'buyButton' + oferta.id}" class="btn btn-info">Comprar</button>
+					<button type="button" th:id="${'buyButton' + oferta.id}" class="btn btn-info" th:text="#{oferta.comprar}">Comprar</button>
 					<script th:inline="javascript">
 						 /*<![CDATA[*/
 						 $( "#buyButton[[${oferta.id}]]" ).click(function() {
@@ -41,7 +41,7 @@
 					 </div>
 				</div>
 			</td>
-			<td th:if="${oferta.comprada}" th:text="Vendido"></td>
+			<td th:if="${oferta.comprada}" th:text="#{oferta.vendida}"></td>
 		</tr>
 	</tbody>
 </table>

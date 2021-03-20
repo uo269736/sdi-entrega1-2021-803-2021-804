@@ -7,17 +7,17 @@
 	<!-- Barra de Navegación superior -->
 	<nav th:replace="fragments/nav" />
 	<div class="container">
-		<h2>Mis Ofertas</h2>
+		<h2 th:text="#{oferta.milista.titulo}">Mis Ofertas</h2>
 		<form class="navbar-form" action="/oferta/userlist">
  			<div class="form-group">
  				<input name="searchText" type="text" class="form-control" size="50"
  					placeholder="Buscar por titulo">
  			</div>
- 			<button type="submit" class="btn btn-default">Buscar</button>
+ 			<button type="submit" class="btn btn-default" th:text="#{oferta.buscar}">Buscar</button>
 		</form>
  
-		<p>En este apartado se listan todas sus ofertas:</p>
-		<button type="button" id="updateButton" class="btn btn-default">Actualizar</button>
+		<p th:text="#{oferta.milista}">En este apartado se listan todas sus ofertas:</p>
+		<button type="button" id="updateButton" class="btn btn-default" th:text="#{oferta.actualizar}">Actualizar</button>
 		<script th:inline="javascript">
 			/*<![CDATA[*/
 				$("#updateButton").click(function() {
@@ -34,9 +34,9 @@
 		<table class="table table-hover" id="tableOfertas">
 			<thead>
 				<tr>
-					<th class="col-md-1">id</th>
-					<th>Titulo</th>
-					<th>Cantidad (euros)</th>
+					<th class="col-md-1" th:text="#{oferta.id}">id</th>
+					<th th:text="#{oferta.titulo}">Titulo</th>
+					<th th:text="#{oferta.cantidad}">Cantidad (euros)</th>
 					<th class="col-md-1"></th>
 					<th class="col-md-1"></th>
 					<th class="col-md-1"></th>
@@ -47,8 +47,8 @@
 					<td th:text="${oferta.id}">1</td>
 					<td th:text="${oferta.titulo}">A</td>
 					<td th:text="${oferta.cantidad}">10</td>
-					<td><a th:href="${'/oferta/details/' + oferta.id}">detalles</a></td>
-					<td><a th:href="${'/oferta/delete/' + oferta.id}">eliminar</a></td>
+					<td><a th:href="${'/oferta/details/' + oferta.id}" th:text="#{oferta.detalles}">detalles</a></td>
+					<td><a th:href="${'/oferta/delete/' + oferta.id}" th:text="#{oferta.eliminar}">eliminar</a></td>
 				</tr>
 			</tbody>
 		</table>

@@ -10,20 +10,20 @@
 	<div class="container">
 		<h2>Detalles de la oferta</h2>
 		<div class="panel panel-default">
-			<div class="panel-heading">Titulo</div>
+			<div class="panel-heading" th:text="#{oferta.titulo}">Titulo</div>
 			<div class="panel-body" th:text="${oferta.titulo}">28276</div>
 		</div>
 		<div class="panel panel-default">
-			<div class="panel-heading">Descripcion</div>
+			<div class="panel-heading" th:text="#{oferta.descripcion}">Descripcion</div>
 			<div class="panel-body" th:text="${oferta.descripcion}">
 				Ejercicio 1</div>
 		</div>
 		<div class="panel panel-default">
-			<div class="panel-heading">Fecha de publicacion</div>
+			<div class="panel-heading" th:text="#{oferta.fecha}">Fecha de publicacion</div>
 			<div class="panel-body" th:text="${oferta.fechaAlta}">100</div>
 		</div>
 		<div class="panel panel-default">
-			<div class="panel-heading">Cantidad</div>
+			<div class="panel-heading" th:text="#{oferta.cantidad}">Cantidad</div>
 			<div class="panel-body" th:text="${oferta.cantidad}">100</div>
 		</div>
 	</div>
