@@ -761,7 +761,8 @@ public class MyWallapopTests {
 		elementos = PO_View.checkElement(driver, "free", "//button[contains(@id, 'buyButton')]");
 		elementos.get(0).click();
 		//No pasa nada y no podemos capturar el error ya que hacemos uso del metodo alert para notificarlo
-		driver.navigate().to("http://localhost:8080/");
+		//Por tanto para asegurar su correcto funcionamiento esperamos 2 seg
+		SeleniumUtils.esperarSegundos(driver, 2);driver.navigate().to("http://localhost:8080/");
 		//El saldo no ha variado, la compra no se ha realizado
 		SeleniumUtils.textoPresentePagina(driver, saldo); 
 		//Nos desconectamos
@@ -949,8 +950,10 @@ public class MyWallapopTests {
 		elementos = PO_View.checkElement(driver, "free", "//button[contains(@id, 'destacarButton')]");
 		elementos.get(0).click();
 		//Usamos alert por tanto no podemos capturar el mensaje
+		//Por tanto para asegurar su correcto funcionamiento esperamos 2 seg
+		SeleniumUtils.esperarSegundos(driver, 2);
 		//Comprobamos que en home no esta la segunda oferta destacada
-		driver.navigate().to("http://localhost:8080/");
+		driver.navigate().to("http://localhost:8080");
 		SeleniumUtils.textoNoPresentePagina(driver, "Cesta picnic");
 		//Comprobamos que el saldo es el mismo
 		saldo=String.valueOf(saldon-20);//-20 de la primera que destacamos

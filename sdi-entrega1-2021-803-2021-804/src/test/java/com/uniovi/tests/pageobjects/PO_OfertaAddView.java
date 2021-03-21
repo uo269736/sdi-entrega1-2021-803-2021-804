@@ -90,7 +90,7 @@ public class PO_OfertaAddView extends PO_NavView{
 	}
 	
 	static public void checkañadirOfertas(WebDriver driver, int language) {
-		SeleniumUtils.EsperaCargaPagina(driver, "text", p.getString("oferta.add", language), getTimeout());
+		SeleniumUtils.EsperaCargaPagina(driver, "text", p.getString("oferta.enviar", language), getTimeout());
 		SeleniumUtils.EsperaCargaPagina(driver, "text", p.getString("oferta.titulo", language), getTimeout());
 	}
 	
