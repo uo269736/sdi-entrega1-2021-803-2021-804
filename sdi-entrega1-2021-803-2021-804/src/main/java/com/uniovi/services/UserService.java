@@ -73,4 +73,12 @@ public class UserService {
 		usersRepository.save(usuario);
 	}
 
+	/*
+	 * Metodo que se invocara cuando se realice el registro de un nuevo usuario
+	 */
+	public void nuevoUsuario(User user, String rol) {
+		user.setRol(rol);
+		user.setSaldo(100);
+		addUser(user);
+	}
 }

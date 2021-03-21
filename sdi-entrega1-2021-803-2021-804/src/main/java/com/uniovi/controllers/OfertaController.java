@@ -1,7 +1,6 @@
 package com.uniovi.controllers;
 
 import java.security.Principal;
-import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.logging.Level;
@@ -93,7 +92,7 @@ public class OfertaController {
 	
 	@RequestMapping(value="/oferta/add", method=RequestMethod.POST )
 	public String setOferta(Model model,@Validated Oferta oferta, BindingResult result){
-		oferta.setUser(userService.getUserAuthenticated());
+		ofertaService.asignaUsuario(oferta, userService.getUserAuthenticated());
 		ofertaAddFormValidator.validate(oferta, result);
 		model.addAttribute("usersList", userService.getUsers());
 		User user = userService.getUserAuthenticated();
@@ -101,8 +100,7 @@ public class OfertaController {
 			log.log(Level.INFO, "ERROR: El usuario con id "+user.getId()+" e email "+user.getEmail()+ " ha intentado agregar una oferta con datos no validos");
 			return "oferta/add";
 		}
-		oferta.setFechaAlta(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
-		oferta.setUser(userService.getUserAuthenticated());
+		ofertaService.creaOfertaAhora(oferta, userService.getUserAuthenticated());
 		if(oferta.isDestacada()) {
 			log.log(Level.INFO, "El usuario con id "+user.getId()+" e email "+user.getEmail()+ " creo una oferta destacada");
 			userService.getUserAuthenticated().setSaldo(userService.getUserAuthenticated().getSaldo()-20);

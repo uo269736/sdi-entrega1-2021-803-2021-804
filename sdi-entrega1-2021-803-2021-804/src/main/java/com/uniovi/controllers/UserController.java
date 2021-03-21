@@ -102,9 +102,7 @@ public class UserController {
 		if(result.hasErrors()) {
 			return "signup";
 		}
-		user.setRol(rolesService.getRoles()[0]);
-		user.setSaldo(100);
-		userService.addUser(user);
+		userService.nuevoUsuario(user, rolesService.getRoles()[0]);
 		log.log(Level.INFO, "El usuario con id "+user.getId()+" e email "+user.getEmail()+ "ha sido registrado");
 		securityService.autoLogin(user.getEmail(), user.getPasswordConfirm());
 		return "redirect:home";

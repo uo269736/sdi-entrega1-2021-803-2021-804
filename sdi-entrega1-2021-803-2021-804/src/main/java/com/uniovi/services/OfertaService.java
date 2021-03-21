@@ -1,6 +1,7 @@
 package com.uniovi.services;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -153,4 +154,12 @@ public class OfertaService {
 		return ofertas;
 	}
 	
+	public void asignaUsuario(Oferta oferta, User usuario) {
+		oferta.setUser(usuario);
+	}
+	
+	public void creaOfertaAhora(Oferta oferta, User usuario) {
+		oferta.setFechaAlta(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
+		oferta.setUser(usuario);
+	}
 }
