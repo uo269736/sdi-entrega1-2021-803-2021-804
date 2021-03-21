@@ -27,6 +27,27 @@ public class PO_OfertaAddView extends PO_NavView{
 		driver.findElement(boton).click();
 	}
 	
+	static public void fillForm(WebDriver driver, String ptitulo, String pdescripcion, String pcantidad, boolean destacada) {
+		WebElement titulo = driver.findElement(By.name("titulo"));
+		titulo.click();
+		titulo.clear();
+		titulo.sendKeys(ptitulo);
+		WebElement descripcion = driver.findElement(By.name("descripcion"));
+		descripcion.click();
+		descripcion.clear();
+		descripcion.sendKeys(pdescripcion);		
+		WebElement cantidad = driver.findElement(By.name("cantidad"));
+		cantidad.click();
+		cantidad.clear();
+		cantidad.sendKeys(pcantidad);	
+		//Seleccionamos el checkbok
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//input[contains(@type,'checkbox')]");
+		elementos.get(0).click();
+		// Pulsar el boton de Enviar.
+		By boton = By.className("btn");
+		driver.findElement(boton).click();
+	}
+	
 	static public void creaOferta(WebDriver driver, String titulo, String descripcion, double cantidad) {
 		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'ofertas-menu')]/a");
 		elementos.get(0).click();
@@ -35,6 +56,16 @@ public class PO_OfertaAddView extends PO_NavView{
 		elementos.get(0).click();
 		// Rellenamos el formulario y lo enviamos
 		PO_OfertaAddView.fillForm(driver, titulo, descripcion, String.valueOf(cantidad));
+	}
+	
+	static public void creaOferta(WebDriver driver, String titulo, String descripcion, double cantidad, boolean destacada) {
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'ofertas-menu')]/a");
+		elementos.get(0).click();
+		// Accedemos a Agregar Ofertas
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href, 'oferta/add')]");
+		elementos.get(0).click();
+		// Rellenamos el formulario y lo enviamos
+		PO_OfertaAddView.fillForm(driver, titulo, descripcion, String.valueOf(cantidad), true);
 	}
 	
 	static public void checkChangeIdiom(WebDriver driver, String textIdiom1, String textIdiom2, int locale1,
