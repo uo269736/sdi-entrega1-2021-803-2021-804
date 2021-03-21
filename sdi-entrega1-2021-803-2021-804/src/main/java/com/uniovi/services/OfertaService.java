@@ -133,4 +133,23 @@ public class OfertaService {
         ofertaRepository.findAll().forEach(ofertas::add);
         return ofertas;
     }
+	
+	public void setOfertaDestacar(Long id) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String email = auth.getName();
+		Oferta oferta = ofertaRepository.findById(id).get();
+		User usuario = userService.getUserByEmail(email);
+		if(!oferta.isDestacada()) {
+			if(20 <= usuario.getSaldo()) {
+				oferta.setDestacada(true);
+				ofertaRepository.save(oferta);
+				userService.realizaPagoDestacar(20, usuario.getId());
+			}
+		}
+	}
+	public Page<Oferta> getOfertasDestacadas(Pageable pageable) {
+		Page<Oferta> ofertas = ofertaRepository.findDestacadas(pageable, true);
+		return ofertas;
+	}
+	
 }

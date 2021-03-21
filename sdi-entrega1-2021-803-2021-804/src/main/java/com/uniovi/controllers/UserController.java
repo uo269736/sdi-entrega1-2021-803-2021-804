@@ -1,5 +1,6 @@
 package com.uniovi.controllers;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -7,6 +8,9 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,7 +23,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.ServletWebRequest;
 
+import com.uniovi.entities.Oferta;
 import com.uniovi.entities.User;
+import com.uniovi.services.OfertaService;
 import com.uniovi.services.RolesService;
 import com.uniovi.services.SecurityService;
 import com.uniovi.services.UserService;
@@ -33,6 +39,9 @@ public class UserController {
 	
 	@Autowired
 	private SecurityService securityService;
+	
+	@Autowired
+	private OfertaService ofertaService;
 	
 	@Autowired
 	private RolesService rolesService;
@@ -109,9 +118,12 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = { "/home" }, method = RequestMethod.GET)
-	public String home(Model model) {
+	public String home(Model model, Pageable pageable) {
 		User u= userService.getUserAuthenticated();
 		httpSession.setAttribute("usuario", u);
+		Page<Oferta> ofertasDestacadas = ofertaService.getOfertasDestacadas(pageable);
+		model.addAttribute("ofertaList", ofertasDestacadas.getContent());
+		model.addAttribute("page", ofertasDestacadas);
 		return "home";
 	}
 	

@@ -40,6 +40,8 @@
 					<th class="col-md-1"></th>
 					<th class="col-md-1"></th>
 					<th class="col-md-1"></th>
+					<th class="col-md-1"></th>
+					<th class="col-md-1"></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -49,6 +51,30 @@
 					<td th:text="${oferta.cantidad}">10</td>
 					<td><a th:href="${'/oferta/details/' + oferta.id}" th:text="#{oferta.detalles}">detalles</a></td>
 					<td><a th:href="${'/oferta/delete/' + oferta.id}" th:text="#{oferta.eliminar}">eliminar</a></td>
+					<td>
+						<div th:if="${!oferta.destacada}">
+							<button type="button" th:id="${'destacarButton' + oferta.id}" class="btn btn-info" th:text="#{oferta.destacar.boton}">Destacar</button>
+							<script th:inline="javascript">
+								 /*<![CDATA[*/
+								 $( "#destacarButton[[${oferta.id}]]" ).click(function() {
+									 $.get( "/oferta/[[${oferta.id}]]/destacar", function( data ) {
+										 var numberPage = [[${param.page}]];
+										 var urlUpdate = '/oferta/list';
+										 if ( numberPage != null ){
+										 	urlUpdate += "?page="+numberPage[0];
+										 }						 
+										 $("#lista").load(urlUpdate);
+										 location.reload();
+										if(20 > [[${session.usuario.saldo}]]){
+											 alert("Error al destacar la oferta, saldo insuficiente.");
+										}
+									 });
+								 });
+								 /*]]>*/
+							 </script> 
+						</div>
+					</td>
+					<td th:if="${oferta.destacada}" th:text="#{oferta.destacada.boton}"></td>
 				</tr>
 			</tbody>
 		</table>

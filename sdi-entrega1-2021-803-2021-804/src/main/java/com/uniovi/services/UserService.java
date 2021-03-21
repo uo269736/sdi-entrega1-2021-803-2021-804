@@ -57,6 +57,11 @@ public class UserService {
 		usersRepository.updateSaldoOfertaVendida(idVendedor, cantidad);
 	}
 	
+	public void realizaPagoDestacar(double cantidad, Long idUser) {
+		// Actualizamos el saldo del comprador
+		usersRepository.updateSaldoOfertaComprada(idUser, cantidad);
+	}
+	
 	public User getUserAuthenticated() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user=getUserByEmail(auth.getName());

@@ -26,6 +26,9 @@ public class OfertaAddFormValidator implements Validator {
 		if (oferta.getCantidad() < 0) {
 			errors.rejectValue("cantidad", "Error.oferta.cantidad.negativa");
 		}
+		if (oferta.getUser().getSaldo() < 20) {
+			errors.rejectValue("destacada", "Error.oferta.destacada");
+		}
 		
 	}
 }

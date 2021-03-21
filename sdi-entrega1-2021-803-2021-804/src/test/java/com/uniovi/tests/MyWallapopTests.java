@@ -146,10 +146,10 @@ public class MyWallapopTests {
 
 	// Miguel
 	static String PathFirefox65 = "C:\\Program Files\\Mozilla Firefox\\firefox.exe";
-	//static String Geckdriver024 = "C:\\Users\\MiguelUni\\Desktop\\TrabajoUniversidadMiguel\\Tercero\\SDI\\Sesion 5\\PL-SDI-Sesión5-material\\geckodriver024win64.exe";
+	static String Geckdriver024 = "C:\\Users\\MiguelUni\\Desktop\\TrabajoUniversidadMiguel\\Tercero\\SDI\\Sesion 5\\PL-SDI-Sesión5-material\\geckodriver024win64.exe";
 
 	// Alex
-	static String Geckdriver024 = "C:\\Users\\Usuario\\Desktop\\CallateYa\\SDI\\Sesion5\\PL-SDI-Sesión5-material\\geckodriver024win64.exe";
+	//static String Geckdriver024 = "C:\\Users\\Usuario\\Desktop\\CallateYa\\SDI\\Sesion5\\PL-SDI-Sesión5-material\\geckodriver024win64.exe";
 
 	static WebDriver driver = getDriver(PathFirefox65, Geckdriver024);
 	static String URL = "http://localhost:8080";
@@ -853,6 +853,111 @@ public class MyWallapopTests {
 		driver.navigate().to("http://localhost:8080/user/list");
 		//Comprobamos que aparece el texto que nos prohibe entrar
 		SeleniumUtils.textoPresentePagina(driver, "HTTP Status 403 – Forbidden");
+		
+	}
+	
+	// [Prueba36] Al crear una oferta marcar dicha oferta como destacada y a continuación comprobar: i) que
+	// aparece en el listado de ofertas destacadas para los usuarios y que el saldo del usuario se actualiza
+	// adecuadamente en la vista del ofertante (-20).
+	@Test
+	public void Prueba36() {
+		// Vamos al formulario de login
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario.
+		PO_LoginView.fillForm(driver, "UO101014@uniovi.es", "123456");
+		//Comprobamos que el saldo del usuario es el que tiene que ser
+		User u=usersService.getUserByEmail("UO101014@uniovi.es");
+		double saldon=u.getSaldo();
+		String saldo= String.valueOf(saldon);
+		SeleniumUtils.textoPresentePagina(driver, saldo);	
+		// Creamos la oferta
+		PO_OfertaAddView.creaOferta(driver, "Pato de goma", "Vendo el pato de goma que me regalo mi tia cuando era pequeño. Por cierto, es de goma", 4, true);
+		// Vamos a la vista home
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'home')]/a");
+		elementos.get(0).click();
+		// Comprobamos que la oferta destacada esta en la lista de home
+		SeleniumUtils.textoPresentePagina(driver, "Pato de goma");
+		//Comprobamos que el saldo del usuario sea el del principio menos 20
+		saldo=String.valueOf(saldon-20);
+		SeleniumUtils.textoPresentePagina(driver,saldo );	
+		
+		
+	}
+	
+	// [Prueba37] Sobre el listado de ofertas de un usuario con menos de 20 euros de saldo, pinchar en el
+	// enlace Destacada y a continuación comprobar: que aparece en el listado de ofertas destacadas para los
+	// usuarios y que el saldo del usuario se actualiza adecuadamente en la vista del ofertante (-20).
+	@Test
+	public void Prueba37() {
+		// Vamos al formulario de logueo.
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario
+		PO_LoginView.fillForm(driver, "UO101010@uniovi.es", "123456");
+		//Comprobamos que el saldo del usuario es el que tiene que ser
+		User u=usersService.getUserByEmail("UO101010@uniovi.es");
+		double saldon=u.getSaldo();
+		String saldo= String.valueOf(saldon);
+		SeleniumUtils.textoPresentePagina(driver, saldo);	
+		// Seleccionamos el menu ofertas
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'ofertas-menu')]/a");
+		elementos.get(0).click();
+		// Accedemos a Ver Mis Ofertas
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href, 'oferta/userlist')]");
+		elementos.get(0).click();
+		//Comprobamos que la oferta que vamos a destacar esta presente
+		SeleniumUtils.textoPresentePagina(driver, "Patinete");
+		//Seleccionamos el boton de destacar 
+		elementos = PO_View.checkElement(driver, "free", "//button[contains(@id, 'destacarButton')]");
+		elementos.get(0).click();
+		// Vamos a la vista home
+		elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'home')]/a");
+		elementos.get(0).click();
+		// Comprobamos que la oferta destacada esta en la lista de home
+		SeleniumUtils.textoPresentePagina(driver, "Patinete");
+		//Comprobamos que el saldo del usuario sea el del principio menos 20
+		saldo=String.valueOf(saldon-20);
+		SeleniumUtils.textoPresentePagina(driver,saldo );	
+	}
+	
+	// [Prueba38] Sobre el listado de ofertas de un usuario con menos de 20 euros de saldo, pinchar en el
+	// enlace Destacada y a continuación comprobar que se muestra el mensaje de saldo no suficiente.
+	@Test
+	public void Prueba38() {
+		// Vamos al formulario de logueo.
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario
+		PO_LoginView.fillForm(driver, "UO101010@uniovi.es", "123456");
+		//Comprobamos que el saldo del usuario es el que tiene que ser
+		User u=usersService.getUserByEmail("UO101010@uniovi.es");
+		double saldon=u.getSaldo();
+		String saldo= String.valueOf(saldon);
+		SeleniumUtils.textoPresentePagina(driver, saldo);	
+		// Seleccionamos el menu ofertas
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'ofertas-menu')]/a");
+		elementos.get(0).click();
+		// Accedemos a Ver Mis Ofertas
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href, 'oferta/userlist')]");
+		elementos.get(0).click();
+		//Comprobamos que la oferta que vamos a destacar esta presente
+		SeleniumUtils.textoPresentePagina(driver, "Patinete");
+		//Seleccionamos el boton de destacar
+		elementos = PO_View.checkElement(driver, "free", "//button[contains(@id, 'destacarButton')]");
+		elementos.get(0).click();
+		//Comprobamos que ahora esta la otra oferta a destacar
+		SeleniumUtils.textoPresentePagina(driver, "Cesta picnic");
+		//Hemos destacado una para quedarnos sin dinero, ahora probaremos a destacar otra
+		elementos = PO_View.checkElement(driver, "free", "//button[contains(@id, 'destacarButton')]");
+		elementos.get(0).click();
+		//Usamos alert por tanto no podemos capturar el mensaje
+		//Comprobamos que en home no esta la segunda oferta destacada
+		driver.navigate().to("http://localhost:8080/");
+		SeleniumUtils.textoNoPresentePagina(driver, "Cesta picnic");
+		//Comprobamos que el saldo es el mismo
+		saldo=String.valueOf(saldon-20);//-20 de la primera que destacamos
+		SeleniumUtils.textoPresentePagina(driver,saldo );
+		
+		
+		
 	}
 
 }
