@@ -12,7 +12,12 @@
 			<span sec:authentication="principal.username"
  			th:inline="text"></span>
 		</p>
+		<div class="table-responsive">
+			<table th:replace="fragments/tableOfertas" th:fragment="tableOfertas" id="tableOfertas"/>
+		</div>
 	</div>
+	<footer th:replace="fragments/pagination"/>
+		
 	<footer th:replace="fragments/footer" />
 </body>
 </html>

@@ -611,6 +611,7 @@ public class MyWallapopTests {
 		driver.navigate().to("http://localhost:8080/user/list");
 		//Comprobamos que aparece el texto que nos prohibe entrar
 		SeleniumUtils.textoPresentePagina(driver, "HTTP Status 403 – Forbidden");
+		
 	}
 
 }

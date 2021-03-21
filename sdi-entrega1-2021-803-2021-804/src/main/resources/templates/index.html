@@ -8,6 +8,10 @@
 	<div class="container" style="text-align: center">
 		<h2 th:text="#{welcome.message}"></h2>
 		<p th:text="#{inicio.message}">Hola</p>
+		<div class="table-responsive">
+			<table th:replace="fragments/tableOfertas" th:fragment="tableOfertas" id="tableOfertas"/>
+		</div>
+		<footer th:replace="fragments/pagination"/>
 	</div>
 	
 	<footer th:replace="fragments/footer"/>

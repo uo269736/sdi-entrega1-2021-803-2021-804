@@ -89,6 +89,7 @@ public class OfertaController {
 	
 	@RequestMapping(value="/oferta/add", method=RequestMethod.POST )
 	public String setOferta(Model model,@Validated Oferta oferta, BindingResult result){
+		oferta.setUser(userService.getUserAuthenticated());
 		ofertaAddFormValidator.validate(oferta, result);
 		model.addAttribute("usersList", userService.getUsers());
 		if(result.hasErrors()) {
@@ -96,6 +97,10 @@ public class OfertaController {
 		}
 		oferta.setFechaAlta(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
 		oferta.setUser(userService.getUserAuthenticated());
+		if(oferta.isDestacada()) {
+			userService.getUserAuthenticated().setSaldo(userService.getUserAuthenticated().getSaldo()-20);
+			userService.addUser(userService.getUserAuthenticated());
+		}
 		ofertaService.addOferta(oferta);
 		return "redirect:/oferta/list";
 	}
@@ -125,6 +130,12 @@ public class OfertaController {
 	@RequestMapping(value="/oferta/{id}/comprar", method=RequestMethod.GET)
 	public String setCompra(Model model, @PathVariable Long id){
 		ofertaService.setOfertaComprada(true, id);
+		return "redirect:/oferta/list";
+	}
+	
+	@RequestMapping(value="/oferta/{id}/destacar", method=RequestMethod.GET)
+	public String setDestacar(Model model, @PathVariable Long id){
+		ofertaService.setOfertaDestacar(id);
 		return "redirect:/oferta/list";
 	}
 }

@@ -27,4 +27,7 @@ public interface OfertaRepository extends CrudRepository<Oferta, Long>{
 	@Transactional
 	@Query("UPDATE Oferta SET comprada = ?1 WHERE id = ?2")
 	void updateComprada(Boolean resend, Long id);
+
+	@Query("SELECT r FROM Oferta r WHERE r.destacada = ?1")
+	Page<Oferta> findDestacadas(Pageable pageable, boolean destacadas);
 }
