@@ -1,6 +1,7 @@
 package com.uniovi.tests;
 
 import java.sql.Date;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -8,10 +9,14 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import com.uniovi.entities.Oferta;
 import com.uniovi.entities.User;
@@ -20,13 +25,19 @@ import com.uniovi.services.OfertaService;
 import com.uniovi.services.RolesService;
 import com.uniovi.services.UserService;
 import com.uniovi.tests.pageobjects.PO_HomeView;
+import com.uniovi.tests.pageobjects.PO_LoginView;
+import com.uniovi.tests.pageobjects.PO_OfertaAddView;
+import com.uniovi.tests.pageobjects.PO_OfertasCompradasListView;
+import com.uniovi.tests.pageobjects.PO_Properties;
 import com.uniovi.tests.pageobjects.PO_RegisterView;
+import com.uniovi.tests.pageobjects.PO_UserListView;
 import com.uniovi.tests.pageobjects.PO_View;
 import com.uniovi.tests.util.SeleniumUtils;
 
 //Ordenamos las pruebas por el nombre del método
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class MyWallapopTests {
 	// Reinicio de base de datos
 	@Autowired
@@ -43,6 +54,7 @@ public class MyWallapopTests {
 		// Borramos todas las entidades
 		usersRepository.deleteAll();
 		// Ahora las volvemos a crear
+		
 		// Creacion de usuarios
 		User user1 = new User("UO101010@uniovi.es", "Pedro", "Calvo");
 		user1.setPassword("123456");
@@ -92,9 +104,9 @@ public class MyWallapopTests {
 		Oferta u4c = new Oferta("Maquina de escribir", "Maquina recien comprada, 1 semana de uso", new Date(121, 2, 12),
 				65, user4);
 		Oferta u5a = new Oferta("Pantalones de chandal", "Patalones de chandal negro de adidas", new Date(121, 2, 12),
-				20, user4);
-		Oferta u5b = new Oferta("Calculadora", "Calculadora cientifica", new Date(121, 2, 12), 34, user4);
-		Oferta u5c = new Oferta("Bicicleta", "Bicicleta de montaña, de color rojo", new Date(121, 2, 12), 102, user4);
+				20, user5);
+		Oferta u5b = new Oferta("Calculadora", "Calculadora cientifica", new Date(121, 2, 12), 34, user5);
+		Oferta u5c = new Oferta("Bicicleta", "Bicicleta de montaña, de color rojo", new Date(121, 2, 12), 102, user5);
 
 		// Añadimos las ofertas
 		ofertaService.addOferta(u1a);
@@ -174,7 +186,7 @@ public class MyWallapopTests {
 
 	// [Prueba1] Registro de Usuario con datos válidos.
 	@Test
-	public void Prueba1() {
+	public void Prueba01() {
 		// Vamos al formulario de registro
 		PO_HomeView.clickOption(driver, "signup", "class", "btn btn-primary");
 		// Rellenamos el formulario.
@@ -186,73 +198,104 @@ public class MyWallapopTests {
 	// [Prueba2] Registro de Usuario con datos inválidos (email vacío, nombre vacío,
 	// apellidos vacíos).
 	@Test
-	public void Prueba2() {
+	public void Prueba02() {
 		// Vamos al formulario de registro
 		PO_HomeView.clickOption(driver, "signup", "class", "btn btn-primary");
 		// Rellenamos el formulario.
 		PO_RegisterView.fillForm(driver, "", "", "", "123456", "123456");
 		// Comprobamos que no cambiamos de página y que no sale mensaje de error
-		PO_View.checkElement(driver, "text", "Regístrate como usuario");
+		SeleniumUtils.textoPresentePagina(driver, "Regístrate como usuario");
 		SeleniumUtils.textoNoPresentePagina(driver, "debe");
 	}
 
 	// [Prueba3] Registro de Usuario con datos inválidos (repetición de contraseña
 	// inválida).
 	@Test
-	public void Prueba3() {
+	public void Prueba03() {
 		// Vamos al formulario de registro
 		PO_HomeView.clickOption(driver, "signup", "class", "btn btn-primary");
 		// Rellenamos el formulario.
 		PO_RegisterView.fillForm(driver, "a@email.com", "Josefo", "Perez", "123456", "456");
 		// Comprobamos que no cambiamos de página y que sale el mensaje de error de las
 		// contraseñas
-		PO_View.checkElement(driver, "text", "Las contraseñas no coinciden");
+		SeleniumUtils.textoPresentePagina(driver, "Las contraseñas no coinciden");
+		
 	}
 
 	// [Prueba4] Registro de Usuario con datos inválidos (email existente).
 	@Test
-	public void Prueba4() {
+	public void Prueba04() {
 		// Vamos al formulario de registro
 		PO_HomeView.clickOption(driver, "signup", "class", "btn btn-primary");
 		// Rellenamos el formulario.
 		PO_RegisterView.fillForm(driver, "admin@email.com", "Josefo", "Perez", "123456", "456");
 		// Comprobamos que no cambiamos de página y que sale el mensaje de error de las
 		// contraseñas
-		PO_View.checkElement(driver, "text", "Este email ya existe");
+		PO_View.checkKey(driver,"Error.signup.email.duplicate",PO_Properties.getSPANISH());
 	}
 
 	// [Prueba5] Inicio de sesión con datos válidos (administrador).
 	@Test
-	public void Prueba5() {
-
+	public void Prueba05() {
+		// Vamos al formulario de logueo.
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario
+		PO_LoginView.fillForm(driver, "admin@email.com", "admin");
+		// Comprobamos que entramos en la pagina privada del Admin
+		PO_View.checkElement(driver, "text", "admin@email.com");
+		SeleniumUtils.textoPresentePagina(driver, "Gestión de Usuarios");
 	}
 
 	// [Prueba6] Inicio de sesión con datos válidos (usuario estándar).
 	@Test
-	public void Prueba6() {
-
+	public void Prueba06() {
+		// Vamos al formulario de logueo.
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario
+		PO_LoginView.fillForm(driver, "UO101010@uniovi.es", "123456");
+		// Comprobamos que entramos en la pagina privada del Usuario Estandar
+		PO_View.checkElement(driver, "text", "UO101010@uniovi.es");
+		PO_View.checkElement(driver, "text", "Gestión de ofertas");
+		SeleniumUtils.textoNoPresentePagina(driver, "Gestión de Usuarios");
 	}
 
 	// [Prueba7] Inicio de sesión con datos inválidos (usuario estándar, campo email
 	// y contraseña vacíos).
 	@Test
-	public void Prueba7() {
-
+	public void Prueba07() {
+		// Vamos al formulario de logueo.
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario
+		PO_LoginView.fillForm(driver, "", "");
+		// Comprobamos que no nos movemos y que no sale ningún error
+		PO_View.checkElement(driver, "text", "Identifícate");
+		PO_View.checkElement(driver, "text", "Email");
+		SeleniumUtils.textoNoPresentePagina(driver, "Desconectar");
 	}
 
 	// [Prueba8] Inicio de sesión con datos válidos (usuario estándar, email
 	// existente, pero contraseña
 	// incorrecta).
 	@Test
-	public void Prueba8() {
-
+	public void Prueba08() {
+		// Vamos al formulario de logueo.
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario
+		PO_LoginView.fillForm(driver, "UO101010@uniovi.es", "111111");
+		// Comprobamos que nos sale el error de contraseña o usuario incorrecto
+		SeleniumUtils.textoPresentePagina(driver, "El usuario o la contraseña son incorrectos");
 	}
 
 	// [Prueba9] Inicio de sesión con datos inválidos (usuario estándar, email no
 	// existente en la aplicación).
 	@Test
-	public void Prueba9() {
-
+	public void Prueba09() {
+		// Vamos al formulario de logueo.
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario
+		PO_LoginView.fillForm(driver, "123@email.com", "111111");
+		// Comprobamos que nos sale el error de contraseña o usuario incorrecto
+		SeleniumUtils.textoPresentePagina(driver, "El usuario o la contraseña son incorrectos");
 	}
 
 	// [Prueba10] Hacer click en la opción de salir de sesión y comprobar que se
@@ -260,46 +303,141 @@ public class MyWallapopTests {
 	// de sesión (Login).
 	@Test
 	public void Prueba10() {
-
+		// Vamos al formulario de logueo.
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario
+		PO_LoginView.fillForm(driver, "UO101010@uniovi.es", "123456");
+		// Comprobamos que entramos en la pagina privada del Usuario Estandar
+		PO_View.checkElement(driver, "text", "UO101010@uniovi.es");
+		PO_View.checkElement(driver, "text", "Gestión de ofertas");
+		SeleniumUtils.textoNoPresentePagina(driver, "Gestión de Usuarios");
+		// Ahora nos desconectamos
+		PO_HomeView.clickOption(driver, "logout", "class", "btn btn-primary");
+		//Comprobamos que sale la página de inicar sesión
+		SeleniumUtils.textoPresentePagina(driver, "Identifícate");
+		SeleniumUtils.textoPresentePagina(driver, "Email:");
 	}
 
 	// [Prueba11] Comprobar que el botón cerrar sesión no está visible si el usuario
 	// no está autenticado
 	@Test
 	public void Prueba11() {
-
+		// Vamos al formulario de logueo.
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		//Probamos si esta el botón desconectar antes de entrar
+		SeleniumUtils.textoNoPresentePagina(driver, "Desconectar");
+		// Rellenamos el formulario
+		PO_LoginView.fillForm(driver, "UO101010@uniovi.es", "123456");
+		// Comprobamos que entramos en la pagina privada del Usuario Estandar
+		PO_View.checkElement(driver, "text", "UO101010@uniovi.es");
+		PO_View.checkElement(driver, "text", "Gestión de ofertas");
+		SeleniumUtils.textoNoPresentePagina(driver, "Gestión de Usuarios");
+		// Ahora nos desconectamos
+		PO_HomeView.clickOption(driver, "logout", "class", "btn btn-primary");
+		//Ahora tras desconectarnos comprobamos si esta el botón desconectarse
+		SeleniumUtils.textoNoPresentePagina(driver, "Desconectar");
 	}
 
 	// [Prueba12] Mostrar el listado de usuarios y comprobar que se muestran todos
-	// los que existen en el
-	// sistema.
+	// los que existen en el sistema.
 	@Test
 	public void Prueba12() {
-
+		// Vamos al formulario de logueo.
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario
+		PO_LoginView.fillForm(driver, "admin@email.com", "admin");
+		// Pinchamos en la opción de menu de Usuarios: //li[contains(@id, 'users-menu')]/a
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'users-menu')]/a");
+		elementos.get(0).click();
+		// Pinchamos en la opción de lista de usuarios.
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href,'user/list')]");
+		elementos.get(0).click();
+		PO_UserListView.checkAllUsers(driver, usersService);
 	}
 
 	// [Prueba13] Ir a la lista de usuarios, borrar el primer usuario de la lista,
-	// comprobar que la lista se actualiza
-	// y que el usuario desaparece.
+	// comprobar que la lista se actualiza y que el usuario desaparece.
 	@Test
 	public void Prueba13() {
-
+		// Vamos al formulario de logueo.
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario
+		PO_LoginView.fillForm(driver, "admin@email.com", "admin");
+		// Pinchamos en la opción de menu de Usuarios: //li[contains(@id, 'users-menu')]/a
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'users-menu')]/a");
+		elementos.get(0).click();
+		// Pinchamos en la opción de lista de usuarios.
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href,'user/list')]");
+		elementos.get(0).click();
+		//Sacamos la lista de usuarios
+		List<User> usuarios=usersService.getUsers();
+		//Comprobamos que está el primer usuario
+		PO_UserListView.comprobarElementoDeLista(driver, 0, usuarios,true);
+		//Seleccionamos los usuarios que queremos eliminar
+		PO_UserListView.seleccionarUsuario(driver, 0);
+		//Le damos a eliminar 
+		elementos = PO_View.checkElement(driver, "free", "//button[contains(@type,'submit')]");
+		elementos.get(0).click();
+		//Comprobamos que no está el primer elemento de antes
+		PO_UserListView.comprobarElementoDeLista(driver, 0, usuarios,false);
 	}
 
 	// [Prueba14] Ir a la lista de usuarios, borrar el último usuario de la lista,
-	// comprobar que la lista se actualiza
-	// y que el usuario desaparece.
+	// comprobar que la lista se actualiza y que el usuario desaparece.
 	@Test
 	public void Prueba14() {
-
+		// Vamos al formulario de logueo.
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario
+		PO_LoginView.fillForm(driver, "admin@email.com", "admin");
+		// Pinchamos en la opción de menu de Usuarios: //li[contains(@id, 'users-menu')]/a
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'users-menu')]/a");
+		elementos.get(0).click();
+		// Pinchamos en la opción de lista de usuarios.
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href,'user/list')]");
+		elementos.get(0).click();
+		//Sacamos la lista de usuarios
+		List<User> usuarios=usersService.getUsers();
+		//Comprobamos que está el último usuario (en este caso como es un admin es el antepenultimo)
+		PO_UserListView.comprobarElementoDeLista(driver, usuarios.size()-2, usuarios,true);
+		//Seleccionamos los usuarios que queremos eliminar
+		PO_UserListView.seleccionarUsuario(driver, usuarios.size()-2);
+		//Le damos a eliminar 
+		elementos = PO_View.checkElement(driver, "free", "//button[contains(@type,'submit')]");
+		elementos.get(0).click();
+		//Comprobamos que no está el último elemento (penúltimo)
+		PO_UserListView.comprobarElementoDeLista(driver, usuarios.size()-2, usuarios,false);
 	}
 
 	// [Prueba15] Ir a la lista de usuarios, borrar 3 usuarios, comprobar que la
-	// lista se actualiza y que los
-	// usuarios desaparecen
+	// lista se actualiza y que los usuarios desaparecen
 	@Test
 	public void Prueba15() {
-
+		// Vamos al formulario de logueo.
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario
+		PO_LoginView.fillForm(driver, "admin@email.com", "admin");
+		// Pinchamos en la opción de menu de Usuarios: //li[contains(@id, 'users-menu')]/a
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'users-menu')]/a");
+		elementos.get(0).click();
+		// Pinchamos en la opción de lista de usuarios.
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href,'user/list')]");
+		elementos.get(0).click();
+		//Sacamos la lista de usuarios
+		List<User> usuarios=usersService.getUsers();
+		//Comprobamos que están los tres primeros usuarios
+		PO_UserListView.comprobarElementoDeLista(driver, usuarios.size()-2, usuarios,true);
+		//Seleccionamos los usuarios que queremos eliminar
+		PO_UserListView.seleccionarUsuario(driver, 0);
+		PO_UserListView.seleccionarUsuario(driver, 1);
+		PO_UserListView.seleccionarUsuario(driver, 2);
+		//Le damos a eliminar 
+		elementos = PO_View.checkElement(driver, "free", "//button[contains(@type,'submit')]");
+		elementos.get(0).click();
+		//Comprobamos que no están los tres primeros de antes
+		PO_UserListView.comprobarElementoDeLista(driver, 0, usuarios,false);
+		PO_UserListView.comprobarElementoDeLista(driver, 1, usuarios,false);
+		PO_UserListView.comprobarElementoDeLista(driver, 2, usuarios,false);
 	}
 
 	// [Prueba16] Ir al formulario de alta de oferta, rellenarla con datos válidos y
@@ -389,22 +527,49 @@ public class MyWallapopTests {
 	}
 
 	// [Prueba26] Ir a la opción de ofertas compradas del usuario y mostrar la
-	// lista. Comprobar que aparecen
-	// las ofertas que deben aparecer.
+	// lista. Comprobar que aparecen las ofertas que deben aparecer.
 	@Test
 	public void Prueba26() {
-
+		// Vamos al formulario de logueo.
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario
+		PO_LoginView.fillForm(driver, "UO101010@uniovi.es", "123456");
+		// Pinchamos en la opción de menu de Usuarios: //li[contains(@id, 'users-menu')]/a
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'ofertas-menu')]/a");
+		elementos.get(0).click();
+		// Pinchamos en la opción de lista de usuarios.
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href,'oferta/userlistcompradas')]");
+		elementos.get(0).click();
+		//Comprobamos que entramos en las lista de compras
+		SeleniumUtils.textoPresentePagina(driver, "Mis Compras");
+		//Seleccionamos los usuarios que queremos eliminar
+		PO_OfertasCompradasListView.comprobarOfertasCompradas(driver,ofertaService, "UO101010@uniovi.es");
+		
 	}
 
 	// [Prueba27] Visualizar al menos cuatro páginas haciendo el cambio
 	// español/inglés/español
 	// (comprobando que algunas de las etiquetas cambian al idioma correspondiente).
-	// Página
-	// principal/Opciones principales de usuario/Listado de usuarios /Vista de alta
+	// Página  principal/Opciones principales de usuario/Listado de usuarios /Vista de alta
 	// de oferta.
 	@Test
 	public void Prueba27() {
-
+		// Vamos al formulario de logueo.
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario
+		PO_LoginView.fillForm(driver, "UO101010@uniovi.es", "123456");
+		//Comprobamos que cambia de idioma en la página principal
+		PO_HomeView.checkChangeIdiom(driver, "btnSpanish", "btnEnglish",PO_Properties.getSPANISH(), PO_Properties.getENGLISH());
+		//Comprobamos que cambia de idioma en el menu de opciones de usuario
+		PO_HomeView.checkChangeIdiomOptions(driver, "btnSpanish", "btnEnglish",PO_Properties.getSPANISH(), PO_Properties.getENGLISH());
+		//Comprobamos que cambia de idioma en añadir oferta
+		PO_OfertaAddView.checkChangeIdiom(driver, "btnSpanish", "btnEnglish",PO_Properties.getSPANISH(), PO_Properties.getENGLISH());
+		// Ahora nos desconectamos
+		PO_HomeView.clickOption(driver, "logout", "class", "btn btn-primary");
+		// Rellenamos el formulario
+		PO_LoginView.fillForm(driver, "admin@email.com", "admin");
+		//Comprobamos que cambia de idioma en el listado de usuaios
+		PO_UserListView.checkChangeIdiom(driver, "btnSpanish", "btnEnglish",PO_Properties.getSPANISH(), PO_Properties.getENGLISH());
 	}
 
 	// [Prueba28] Intentar acceder sin estar autenticado a la opción de listado de
@@ -412,7 +577,12 @@ public class MyWallapopTests {
 	// deberá volver al formulario de login.
 	@Test
 	public void Prueba28() {
-
+        //Intentamos acceder a lista de usuarios sin identificarnos
+		driver.navigate().to("http://localhost:8080/user/list");
+		//Comprobamos que vamos a la vista de iniciar sesión
+		SeleniumUtils.textoPresentePagina(driver, "Identifícate");
+		SeleniumUtils.textoPresentePagina(driver, "Email:");
+		SeleniumUtils.textoPresentePagina(driver, "Contraseña:");
 	}
 
 	// [Prueba29] Intentar acceder sin estar autenticado a la opción de listado de
@@ -420,7 +590,12 @@ public class MyWallapopTests {
 	// estándar. Se deberá volver al formulario de login.
 	@Test
 	public void Prueba29() {
-
+		//Intentamos acceder al listado de ofertas
+		driver.navigate().to("http://localhost:8080/oferta/userlist");
+		//Comprobamos que vamos a la vista de iniciar sesión
+		SeleniumUtils.textoPresentePagina(driver, "Identifícate");
+		SeleniumUtils.textoPresentePagina(driver, "Email:");
+		SeleniumUtils.textoPresentePagina(driver, "Contraseña:");
 	}
 
 	// [Prueba30] Estando autenticado como usuario estándar intentar acceder a la
@@ -428,7 +603,14 @@ public class MyWallapopTests {
 	// usuarios del administrador. Se deberá indicar un mensaje de acción prohibida.
 	@Test
 	public void Prueba30() {
-
+		// Vamos al formulario de logueo.
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario
+		PO_LoginView.fillForm(driver, "UO101010@uniovi.es", "123456");
+		//Intentamos acceder a lista de usuarios identificados como usuario estandar
+		driver.navigate().to("http://localhost:8080/user/list");
+		//Comprobamos que aparece el texto que nos prohibe entrar
+		SeleniumUtils.textoPresentePagina(driver, "HTTP Status 403 – Forbidden");
 	}
 
 }
