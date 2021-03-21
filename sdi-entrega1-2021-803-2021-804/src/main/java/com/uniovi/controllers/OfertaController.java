@@ -104,6 +104,7 @@ public class OfertaController {
 		oferta.setFechaAlta(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
 		oferta.setUser(userService.getUserAuthenticated());
 		if(oferta.isDestacada()) {
+			log.log(Level.INFO, "El usuario con id "+user.getId()+" e email "+user.getEmail()+ " creo una oferta destacada");
 			userService.getUserAuthenticated().setSaldo(userService.getUserAuthenticated().getSaldo()-20);
 			userService.addUser(userService.getUserAuthenticated());
 		}
@@ -144,6 +145,8 @@ public class OfertaController {
 	@RequestMapping(value="/oferta/{id}/destacar", method=RequestMethod.GET)
 	public String setDestacar(Model model, @PathVariable Long id){
 		ofertaService.setOfertaDestacar(id);
+		User user = userService.getUserAuthenticated();
+		log.log(Level.INFO, "El usuario con id "+user.getId()+" e email "+user.getEmail()+ " hizo que su oferta fuera destacada");
 		return "redirect:/oferta/list";
 	}
 }
