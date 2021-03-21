@@ -1,6 +1,7 @@
 package com.uniovi.tests;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.After;
@@ -11,6 +12,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -27,6 +29,7 @@ import com.uniovi.services.UserService;
 import com.uniovi.tests.pageobjects.PO_HomeView;
 import com.uniovi.tests.pageobjects.PO_LoginView;
 import com.uniovi.tests.pageobjects.PO_OfertaAddView;
+import com.uniovi.tests.pageobjects.PO_OfertaUserList;
 import com.uniovi.tests.pageobjects.PO_OfertasCompradasListView;
 import com.uniovi.tests.pageobjects.PO_Properties;
 import com.uniovi.tests.pageobjects.PO_RegisterView;
@@ -143,11 +146,10 @@ public class MyWallapopTests {
 
 	// Miguel
 	static String PathFirefox65 = "C:\\Program Files\\Mozilla Firefox\\firefox.exe";
-	static String Geckdriver024 = "C:\\Users\\MiguelUni\\Desktop\\TrabajoUniversidadMiguel\\Tercero\\SDI\\Sesion 5\\PL-SDI-Sesión5-material\\geckodriver024win64.exe";
+	//static String Geckdriver024 = "C:\\Users\\MiguelUni\\Desktop\\TrabajoUniversidadMiguel\\Tercero\\SDI\\Sesion 5\\PL-SDI-Sesión5-material\\geckodriver024win64.exe";
 
 	// Alex
-//	static String PathFirefox65 = "C:\\Program Files\\Mozilla Firefox\\firefox.exe";
-//  static String Geckdriver024 = "C:\\Users\\MiguelUni\\Desktop\\TrabajoUniversidadMiguel\\Tercero\\SDI\\Sesion 5\\PL-SDI-Sesión5-material\\geckodriver024win64.exe";
+	static String Geckdriver024 = "C:\\Users\\Usuario\\Desktop\\CallateYa\\SDI\\Sesion5\\PL-SDI-Sesión5-material\\geckodriver024win64.exe";
 
 	static WebDriver driver = getDriver(PathFirefox65, Geckdriver024);
 	static String URL = "http://localhost:8080";
@@ -445,7 +447,23 @@ public class MyWallapopTests {
 	// Comprobar que la oferta sale en el listado de ofertas de dicho usuario.
 	@Test
 	public void Prueba16() {
-
+		// Vamos al formulario de login
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario.
+		PO_LoginView.fillForm(driver, "UO101014@uniovi.es", "123456");
+		// Creamos la oferta
+		PO_OfertaAddView.creaOferta(driver, "Pato de goma", "Vendo el pato de goma que me regalo mi tia cuando era pequeño. Por cierto, es de goma", 4);
+		// Vamos al listado de ofertas personales
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'ofertas-menu')]/a");
+		elementos.get(0).click();
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href, 'oferta/userlist')]");
+		elementos.get(0).click();
+		// Comprobamos que la oferta creada esta presente en la ultima posicion
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@class, 'page-link')]");
+		elementos.get(elementos.size()-1).click();
+		SeleniumUtils.textoPresentePagina(driver, "Pato de goma");		
+		//Nos desconectamos
+		PO_HomeView.clickOption(driver, "logout", "class", "btn btn-primary");
 	}
 
 	// [Prueba17] Ir al formulario de alta de oferta, rellenarla con datos inválidos
@@ -453,23 +471,87 @@ public class MyWallapopTests {
 	// el botón Submit. Comprobar que se muestra el mensaje de campo obligatorio.
 	@Test
 	public void Prueba17() {
-
+		// Vamos al formulario de login
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario.
+		PO_LoginView.fillForm(driver, "UO101014@uniovi.es", "123456");
+		//Creamos oferta no valida
+		PO_OfertaAddView.creaOferta(driver, "Pato", "Vendo el pato de goma que me regalo mi tia cuando era pequeño. Por cierto, es de goma", 4);
+		PO_OfertaAddView.checkKey(driver, "Error.oferta.titulo.length", PO_Properties.getSPANISH() );
+		
+		//Rellenamos el formulario con descripcion no valida
+		PO_OfertaAddView.fillForm(driver, "Pato de goma", "Vendo pato", String.valueOf(4));
+		PO_OfertaAddView.checkKey(driver, "Error.oferta.descripcion.length", PO_Properties.getSPANISH() );
+		
+		//Rellenamos el formulario con precio no valido
+		PO_OfertaAddView.fillForm(driver, "Pato", "Vendo el pato de goma que me regalo mi tia cuando era pequeño. Por cierto, es de goma", String.valueOf(-1));
+		PO_OfertaAddView.checkKey(driver, "Error.oferta.cantidad.negativa", PO_Properties.getSPANISH() );
+	
+		//Nos desconectamos
+		PO_HomeView.clickOption(driver, "logout", "class", "btn btn-primary");
 	}
 
 	// [Prueba18] Mostrar el listado de ofertas para dicho usuario y comprobar que
-	// se muestran todas los que
-	// existen para este usuario.
+	// se muestran todas los que existen para este usuario.
 	@Test
 	public void Prueba18() {
-
+		// Vamos al formulario de login
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario.
+		PO_LoginView.fillForm(driver, "UO101014@uniovi.es", "123456");
+		// Seleccionamos el menu ofertas
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'ofertas-menu')]/a");
+		elementos.get(0).click();
+		// Accedemos a Ver Mis Ofertas
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href, 'oferta/userlist')]");
+		elementos.get(0).click();
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@class, 'page-link')]");
+		// Comprobamos que las ofertas de este usuario esten presentes
+		List<Oferta> ofertas = ofertaService.getListaOfertas();
+		User usuario = usersService.getUserByEmail("UO101014@uniovi.es");
+		List<Oferta> userOfertas = new ArrayList<Oferta>();
+		//Eliminamos las ofertas que no sean del usuario
+		for(Oferta o : ofertas){
+			if(o.getUser().getEmail()==usuario.getEmail())
+				userOfertas.add(o);
+		}
+		//Realizamos las comprobaciones en cada pagina
+		PO_OfertaUserList.comprobarAllOfertas(driver, usuario, userOfertas, elementos);
+		
+		//Nos desconectamos
+		PO_HomeView.clickOption(driver, "logout", "class", "btn btn-primary");
 	}
 
 	// [Prueba19] Ir a la lista de ofertas, borrar la primera oferta de la lista,
-	// comprobar que la lista se actualiza y
-	// que la oferta desaparece.
+	// comprobar que la lista se actualiza y que la oferta desaparece.
 	@Test
 	public void Prueba19() {
-
+		// Vamos al formulario de login
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario.
+		PO_LoginView.fillForm(driver, "UO101014@uniovi.es", "123456");
+		User usuario = usersService.getUserByEmail("UO101014@uniovi.es");
+		// Seleccionamos el menu ofertas
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'ofertas-menu')]/a");
+		elementos.get(0).click();
+		// Accedemos a Ver Mis Ofertas
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href, 'oferta/userlist')]");
+		elementos.get(0).click();
+		// Comprobamos que este la primera oferta
+		List<Oferta> misOfertas = new ArrayList<Oferta>();
+		for(Oferta o : ofertaService.getListaOfertas())
+			if(usuario.getEmail().equals(o.getUser().getEmail()))
+				misOfertas.add(o);
+		int posicion = 0;
+		String titulo = misOfertas.get(posicion).getTitulo();
+		SeleniumUtils.textoPresentePagina(driver, titulo);
+		// Borramos la primera oferta
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href, 'oferta/delete')]");
+		elementos.get(0).click();
+		// Comprobamos que no este la primera oferta
+		SeleniumUtils.textoNoPresentePagina(driver, titulo);
+		// Nos desconectamos
+		PO_HomeView.clickOption(driver, "logout", "class", "btn btn-primary");
 	}
 
 	// Prueba20] Ir a la lista de ofertas, borrar la última oferta de la lista,
@@ -477,53 +559,213 @@ public class MyWallapopTests {
 	// que la oferta desaparece.
 	@Test
 	public void Prueba20() {
-
+		// Vamos al formulario de login
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario.
+		PO_LoginView.fillForm(driver, "UO101014@uniovi.es", "123456");
+		User usuario = usersService.getUserByEmail("UO101014@uniovi.es");
+		// Seleccionamos el menu ofertas
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'ofertas-menu')]/a");
+		elementos.get(0).click();
+		// Accedemos a Ver Mis Ofertas
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href, 'oferta/userlist')]");
+		elementos.get(0).click();
+		// Comprobamos que este la ultima oferta
+		List<Oferta> misOfertas = new ArrayList<Oferta>();
+		for(Oferta o : ofertaService.getListaOfertas())
+			if(usuario.getEmail().equals(o.getUser().getEmail()))
+				misOfertas.add(o);
+		int posicion = misOfertas.size()-1;
+		String titulo = misOfertas.get(posicion).getTitulo();
+		PO_OfertaUserList.comprobarElementoDeLista(driver, posicion, misOfertas, true);
+		// Esperamos a que se muestren los enlaces de paginación la lista de notas
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@class, 'page-link')]");
+		// Nos vamos a la última página
+		elementos.get(posicion).click();
+		// Borramos la ultima oferta
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href, 'oferta/delete')]");
+		elementos.get(posicion).click();
+		// Comprobamos que no este la primera oferta
+		SeleniumUtils.textoNoPresentePagina(driver, titulo);
+		// Nos desconectamos
+		PO_HomeView.clickOption(driver, "logout", "class", "btn btn-primary");
 	}
 
 	// [Prueba21] Hacer una búsqueda con el campo vacío y comprobar que se muestra
-	// la página que
-	// corresponde con el listado de las ofertas existentes en el sistema
+	// la página que corresponde con el listado de las ofertas existentes en el sistema
 	@Test
 	public void Prueba21() {
-
+		// Vamos al formulario de login
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario.
+		PO_LoginView.fillForm(driver, "UO101014@uniovi.es", "123456");
+		// Seleccionamos el menu ofertas
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'ofertas-menu')]/a");
+		elementos.get(0).click();
+		// Accedemos a Ver Ofertas
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href, 'oferta/list')]");
+		elementos.get(0).click();
+		// Clickamos en Buscar
+		elementos = PO_View.checkElement(driver, "free", "//button[contains(@type, 'submit')]");
+		elementos.get(0).click();
+		// Comprobamos que las ofertas de este usuario esten presentes
+		List<Oferta> ofertas = ofertaService.getListaOfertas();
+		User usuario = usersService.getUserByEmail("UO101014@uniovi.es");
+		//Realizamos las comprobaciones en cada pagina
+		PO_OfertaUserList.comprobarAllOfertasPaginaPorPagina(driver, usuario, ofertas, elementos);
+		
+		//Nos desconectamos
+		PO_HomeView.clickOption(driver, "logout", "class", "btn btn-primary");
 	}
 
 	// [Prueba22] Hacer una búsqueda escribiendo en el campo un texto que no exista
-	// y comprobar que se
-	// muestra la página que corresponde, con la lista de ofertas vacía.
+	// y comprobar que se muestra la página que corresponde, con la lista de ofertas vacía.
 	@Test
 	public void Prueba22() {
-
+		// Vamos al formulario de login
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario.
+		PO_LoginView.fillForm(driver, "UO101014@uniovi.es", "123456");
+		// Seleccionamos el menu ofertas
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'ofertas-menu')]/a");
+		elementos.get(0).click();
+		// Accedemos a Ver Ofertas
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href, 'oferta/list')]");
+		elementos.get(0).click();
+		// Realizamos una busqueda de algo inexistente
+		elementos = PO_View.checkElement(driver, "free", "//input[contains(@name, 'searchText')]");
+		elementos.get(0).click();
+		elementos.get(0).clear();
+		elementos.get(0).click();
+		elementos.get(0).sendKeys("nada");
+		// Clickamos en Buscar
+		By boton = By.className("btn");
+		driver.findElement(boton).click();
+		// Comprobamos que no se muestran ofertas
+		List<Oferta> ofertas = ofertaService.getListaOfertas();
+		for(Oferta o : ofertas)
+			SeleniumUtils.textoNoPresentePagina(driver, o.getTitulo());
+		
+		//Nos desconectamos
+		PO_HomeView.clickOption(driver, "logout", "class", "btn btn-primary");
 	}
 
-	// Prueba23] Sobre una búsqueda determinada (a elección del desarrollador),
+	// [Prueba23] Sobre una búsqueda determinada (a elección del desarrollador),
 	// comprar una oferta que deja
 	// un saldo positivo en el contador del comprador. Comprobar que el contador se
 	// actualiza correctamente
 	// en la vista del comprador
 	@Test
 	public void Prueba23() {
-
+		// Vamos al formulario de login
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario -> usuario con saldo muy elevado.
+		PO_LoginView.fillForm(driver, "UO101011@uniovi.es", "123456");
+		User usuario = usersService.getUserByEmail("UO101011@uniovi.es");
+		double saldoInicial = usuario.getSaldo();
+		List<Oferta> ofertas = ofertaService.getListaOfertas();
+		Oferta oferta = null;
+		for(int i=0; i<ofertas.size(); i++)
+			if(!ofertas.get(i).isComprada()) {
+				oferta = ofertas.get(i);
+				break;
+			}
+		// Seleccionamos el menu ofertas
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'ofertas-menu')]/a");
+		elementos.get(0).click();
+		// Accedemos a Ver Ofertas
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href, 'oferta/list')]");
+		elementos.get(0).click();
+		// Realizamos una compra
+		elementos = PO_View.checkElement(driver, "free", "//button[contains(@id, 'buyButton')]");
+		elementos.get(0).click();
+		// Comprobamos el saldo
+		SeleniumUtils.textoPresentePagina(driver, "Saldo: "+(saldoInicial-oferta.getCantidad()));
+		
+		//Nos desconectamos
+		PO_HomeView.clickOption(driver, "logout", "class", "btn btn-primary");
 	}
 
 	// [Prueba24] Sobre una búsqueda determinada (a elección del desarrollador),
-	// comprar una oferta que deja
-	// un saldo 0 en el contador del comprador. Comprobar que el contador se
-	// actualiza correctamente en la
+	// comprar una oferta que deja un saldo 0 en el contador del comprador. 
+	// Comprobar que el contador se  actualiza correctamente en la
 	// vista del comprador.
 	@Test
 	public void Prueba24() {
-
+		// Vamos al formulario de login
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario.
+		PO_LoginView.fillForm(driver, "UO101014@uniovi.es", "123456");
+		//Creamos una oferta que comprara un nuevo usuario
+		PO_OfertaAddView.creaOferta(driver, "Balon de baloncesto", "Pelota de baloncesto de maxima calidad, sin estrenar.", 100);
+		//Nos desconectamos
+		PO_HomeView.clickOption(driver, "logout", "class", "btn btn-primary");	
+		//Nos registramos
+		// Vamos al formulario de registro
+		PO_HomeView.clickOption(driver, "signup", "class", "btn btn-primary");
+		PO_RegisterView.fillForm(driver, "prueba24@email.com", "El Pepe", "Perez", "123456", "123456");
+		// Seleccionamos el menu ofertas
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'ofertas-menu')]/a");
+		elementos.get(0).click();
+		// Accedemos a Ver Ofertas
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href, 'oferta/list')]");
+		elementos.get(0).click();
+		// Realizamos la busqueda
+		elementos = PO_View.checkElement(driver, "free", "//input[contains(@name, 'searchText')]");
+		elementos.get(0).click();
+		elementos.get(0).clear();
+		elementos.get(0).click();
+		elementos.get(0).sendKeys("Balon de baloncesto");
+		// Clickamos en Buscar
+		By boton = By.className("btn");
+		driver.findElement(boton).click();
+		// Realizamos la compra que nos deje el saldo a 0
+		elementos = PO_View.checkElement(driver, "free", "//button[contains(@id, 'buyButton')]");
+		elementos.get(0).click();
+		//Comprobamos el saldo a 0
+		SeleniumUtils.textoPresentePagina(driver, "Saldo: 0");
+		//Nos desconectamos
+		PO_HomeView.clickOption(driver, "logout", "class", "btn btn-primary");
 	}
 
 	// [Prueba25] Sobre una búsqueda determinada (a elección del desarrollador),
-	// intentar comprar una oferta
-	// que esté por encima de saldo disponible del comprador. Y comprobar que se
-	// muestra el mensaje de
-	// saldo no suficiente.
+	// intentar comprar una oferta que esté por encima de saldo disponible del 
+	// comprador. Y comprobar que se muestra el mensaje de saldo no suficiente.
 	@Test
 	public void Prueba25() {
-
+		// Vamos al formulario de login
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario.
+		PO_LoginView.fillForm(driver, "UO101014@uniovi.es", "123456");
+		User usuario = usersService.getUserByEmail("UO101014@uniovi.es");
+		// Seleccionamos el menu ofertas
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'ofertas-menu')]/a");
+		elementos.get(0).click();
+		// Accedemos a Ver Ofertas
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href, 'oferta/list')]");
+		elementos.get(0).click();
+		//Buscamos la oferta mas cara "Motocicleta"
+		elementos = PO_View.checkElement(driver, "free", "//input[contains(@name, 'searchText')]");
+		elementos.get(0).click();
+		elementos.get(0).clear();
+		elementos.get(0).click();
+		elementos.get(0).sendKeys("Motocicleta");
+		
+		// Clickamos en Buscar
+		By boton = By.className("btn");
+		driver.findElement(boton).click();
+		String saldo = String.valueOf(usuario.getSaldo());
+		SeleniumUtils.textoPresentePagina(driver, saldo);
+		
+		//Intentamos realizar la compra
+		elementos = PO_View.checkElement(driver, "free", "//button[contains(@id, 'buyButton')]");
+		elementos.get(0).click();
+		//No pasa nada y no podemos capturar el error ya que hacemos uso del metodo alert para notificarlo
+		driver.navigate().to("http://localhost:8080/");
+		//El saldo no ha variado, la compra no se ha realizado
+		SeleniumUtils.textoPresentePagina(driver, saldo); 
+		//Nos desconectamos
+		PO_HomeView.clickOption(driver, "logout", "class", "btn btn-primary");
 	}
 
 	// [Prueba26] Ir a la opción de ofertas compradas del usuario y mostrar la

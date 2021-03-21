@@ -125,6 +125,7 @@ public class OfertaService {
         ofertaRepository.findAll().forEach(ofertas::add);
         return ofertas;
     }
+	
 	public void setOfertaDestacar(Long id) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String email = auth.getName();
@@ -142,6 +143,5 @@ public class OfertaService {
 		Page<Oferta> ofertas = ofertaRepository.findDestacadas(pageable, true);
 		return ofertas;
 	}
-	
 	
 }
