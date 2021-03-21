@@ -1,7 +1,9 @@
 package com.uniovi.services;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpSession;
@@ -118,5 +120,9 @@ public class OfertaService {
 		return ofertas;
 	}
 	
-	
+	public List<Oferta> getListaOfertas() {
+        List<Oferta> ofertas = new ArrayList<Oferta>();
+        ofertaRepository.findAll().forEach(ofertas::add);
+        return ofertas;
+    }
 }
