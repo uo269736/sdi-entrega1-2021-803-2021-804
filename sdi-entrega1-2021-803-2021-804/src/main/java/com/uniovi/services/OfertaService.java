@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import com.uniovi.entities.Oferta;
 import com.uniovi.entities.User;
 import com.uniovi.repositories.OfertaRepository;
+import static org.springframework.data.util.CastUtils.cast;
 
 @Service
 public class OfertaService {
@@ -44,7 +45,7 @@ public class OfertaService {
 	}
 	
 	public Oferta getOferta(Long id){
-		Set<Oferta> consultedList = (Set<Oferta>) httpSession.getAttribute("consultedList");
+		Set<Oferta> consultedList = cast(httpSession.getAttribute("consultedList"));
 		if ( consultedList == null ) {
 			consultedList = new HashSet<Oferta>();
 		}

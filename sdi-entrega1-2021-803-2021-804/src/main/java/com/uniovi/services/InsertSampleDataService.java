@@ -1,7 +1,6 @@
 package com.uniovi.services;
 import java.sql.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDate;
 
 import javax.annotation.PostConstruct;
 
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.uniovi.entities.Oferta;
 import com.uniovi.entities.User;
-import com.uniovi.repositories.UserRepository;
 @Service
 public class InsertSampleDataService {
 	
@@ -55,21 +53,21 @@ public class InsertSampleDataService {
 		
 		//Creacion de ofertas 
 		//(teniendo en cuenta que el constructor Date empieza a contar los años en 1900 y que enero lo cuenta como el mes 0)
-		Oferta u1a =new Oferta("Patinete", "Patinete de segunda mano marca 'Joi'. Una semana de uso", new Date(121, 2, 12), 20, user1);
-		Oferta u1b =new Oferta("Cesta picnic", "Ideal mochila para picnic. Dimensiones: 30x25", new Date(121, 2, 12), 12, user1);
-		Oferta u1c =new Oferta("Abrigo", "Ideal para el invierno, impermeable y de color rojo", new Date(121, 2, 12), 25, user1);
-		Oferta u2a =new Oferta("Camara", "Camara Nikon en perfecto estado", new Date(121, 2, 12), 80, user2);
-		Oferta u2b =new Oferta("Pendientes", "Pendientes de plata", new Date(121, 2, 12), 17, user2);
-		Oferta u2c =new Oferta("Collar", "Collar de oro", new Date(121, 2, 12), 35, user2);
-		Oferta u3a =new Oferta("Motocicleta", "Moto roja muy rápida", new Date(121, 2, 12), 1000, user3);
-		Oferta u3b =new Oferta("Libro: El Quijote", "El Quijote", new Date(121, 2, 12), 18, user3);
-		Oferta u3c =new Oferta("Maletas", "Maletas grandes para meter mucho equipaje", new Date(121, 2, 12), 30, user3);
-		Oferta u4a =new Oferta("Cargador", "Cargador para iphone, cable de 1 metro", new Date(121, 2, 12), 13, user4);
-		Oferta u4b =new Oferta("Taburete", "De madera, 4 patas", new Date(121, 2, 12), 29, user4);
-		Oferta u4c =new Oferta("Maquina de escribir", "Maquina recien comprada, 1 semana de uso", new Date(121, 2, 12), 65, user4);
-		Oferta u5a =new Oferta("Pantalones de chandal", "Patalones de chandal negro de adidas", new Date(121, 2, 12), 20, user4);
-		Oferta u5b =new Oferta("Calculadora", "Calculadora cientifica", new Date(121, 2, 12), 34, user4);
-		Oferta u5c =new Oferta("Bicicleta", "Bicicleta de montaña, de color rojo", new Date(121, 2, 12), 102, user4);
+		Oferta u1a =new Oferta("Patinete", "Patinete de segunda mano marca 'Joi'. Una semana de uso", Date.valueOf(LocalDate.now()), 20, user1);
+		Oferta u1b =new Oferta("Cesta picnic", "Ideal mochila para picnic. Dimensiones: 30x25", Date.valueOf(LocalDate.now()), 12, user1);
+		Oferta u1c =new Oferta("Abrigo", "Ideal para el invierno, impermeable y de color rojo", Date.valueOf(LocalDate.now()), 25, user1);
+		Oferta u2a =new Oferta("Camara", "Camara Nikon en perfecto estado", Date.valueOf(LocalDate.now()), 80, user2);
+		Oferta u2b =new Oferta("Pendientes", "Pendientes de plata", Date.valueOf(LocalDate.now()), 17, user2);
+		Oferta u2c =new Oferta("Collar", "Collar de oro", Date.valueOf(LocalDate.now()), 35, user2);
+		Oferta u3a =new Oferta("Motocicleta", "Moto roja muy rápida", Date.valueOf(LocalDate.now()), 1000, user3);
+		Oferta u3b =new Oferta("Libro: El Quijote", "El Quijote", Date.valueOf(LocalDate.now()), 18, user3);
+		Oferta u3c =new Oferta("Maletas", "Maletas grandes para meter mucho equipaje", Date.valueOf(LocalDate.now()), 30, user3);
+		Oferta u4a =new Oferta("Cargador", "Cargador para iphone, cable de 1 metro", Date.valueOf(LocalDate.now()), 13, user4);
+		Oferta u4b =new Oferta("Taburete", "De madera, 4 patas", Date.valueOf(LocalDate.now()), 29, user4);
+		Oferta u4c =new Oferta("Maquina de escribir", "Maquina recien comprada, 1 semana de uso", Date.valueOf(LocalDate.now()), 65, user4);
+		Oferta u5a =new Oferta("Pantalones de chandal", "Patalones de chandal negro de adidas", Date.valueOf(LocalDate.now()), 20, user4);
+		Oferta u5b =new Oferta("Calculadora", "Calculadora cientifica", Date.valueOf(LocalDate.now()), 34, user4);
+		Oferta u5c =new Oferta("Bicicleta", "Bicicleta de montaña, de color rojo", Date.valueOf(LocalDate.now()), 102, user4);
 		
 		//Añadimos las ofertas
 		ofertaService.addOferta(u1a);

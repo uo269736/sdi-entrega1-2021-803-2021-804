@@ -4,12 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import com.uniovi.entities.Oferta;
-import com.uniovi.entities.User;
 import com.uniovi.services.OfertaService;
-import com.uniovi.services.UserService;
 import com.uniovi.tests.util.SeleniumUtils;
 
 public class PO_OfertasCompradasListView extends PO_NavView {
