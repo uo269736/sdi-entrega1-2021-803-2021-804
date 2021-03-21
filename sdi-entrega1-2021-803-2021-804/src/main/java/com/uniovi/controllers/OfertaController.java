@@ -4,6 +4,8 @@ import java.security.Principal;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpSession;
 
@@ -40,6 +42,8 @@ public class OfertaController {
 	
 	@Autowired
 	private OfertaAddFormValidator ofertaAddFormValidator;
+	
+	private Logger log = Logger.getLogger("WallapopLogger");
 	
 	@RequestMapping("/oferta/list")
 	public String getList(Model model, Pageable pageable, Principal principal, @RequestParam(value = "", required=false) String searchText){
@@ -91,7 +95,9 @@ public class OfertaController {
 	public String setOferta(Model model,@Validated Oferta oferta, BindingResult result){
 		ofertaAddFormValidator.validate(oferta, result);
 		model.addAttribute("usersList", userService.getUsers());
+		User user = userService.getUserAuthenticated();
 		if(result.hasErrors()) {
+			log.log(Level.INFO, "ERROR: El usuario con id "+user.getId()+" e email "+user.getEmail()+ " ha intentado agregar una oferta con datos no validos");
 			return "oferta/add";
 		}
 		oferta.setFechaAlta(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
@@ -109,6 +115,8 @@ public class OfertaController {
 	@RequestMapping("/oferta/delete/{id}" )
 	public String deleteOferta(@PathVariable Long id){
 		ofertaService.deleteOferta(id);
+		User user = userService.getUserAuthenticated();
+		log.log(Level.INFO, "El usuario con id "+user.getId()+" e email "+user.getEmail()+ " ha eliminado su oferta con id ");
 		return "redirect:/oferta/userlist";
 	}
 
