@@ -1,11 +1,7 @@
 package com.uniovi.tests.pageobjects;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Locale;
-import java.util.Properties;
 import java.util.ResourceBundle;
 
 public class PO_Properties {
@@ -35,6 +31,7 @@ public class PO_Properties {
 		
 		ResourceBundle bundle = ResourceBundle.getBundle(Path, idioms[locale]);
 		String value = bundle.getString(prop);
+		//return value;
 		String result="";
 		try {
 			result = new String(value.getBytes("ISO-8859-1"), "UTF-8");
