@@ -44,5 +44,5 @@ public class CustomConfiguration implements WebMvcConfigurer {
 		resolver.setFallbackPageable(PageRequest.of(page, size));
 		argumentResolvers.add(resolver);
 	}
-
+	
 }

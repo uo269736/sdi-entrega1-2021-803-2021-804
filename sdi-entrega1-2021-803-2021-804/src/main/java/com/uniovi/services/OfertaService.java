@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpSession;
 
@@ -30,6 +32,8 @@ public class OfertaService {
 	
 	@Autowired
 	private UserService userService;
+	
+	private Logger log = Logger.getLogger("WallapopLogger");
 	
 	public void addOferta(Oferta oferta){
 		// Si en Id es null le asignamos el ultimo + 1 de la lista
@@ -66,8 +70,12 @@ public class OfertaService {
 				ofertaRepository.save(oferta);
 				ofertaRepository.updateComprada(revised, oferta.getId());
 				userService.realizaPago(oferta.getCantidad(), usuario.getId(), oferta.getUser().getId());
+				log.log(Level.INFO, "El usuario con id "+usuario.getId()+" e email "+usuario.getEmail()+ " ha comprado la oferta con id "+oferta.getId());
 			}
-		}	
+			else
+				log.log(Level.INFO, "El usuario con id "+usuario.getId()+" e email "+usuario.getEmail()+ " no pudo realizar la compra de la oferta con id "+oferta.getId());
+		}	else
+			log.log(Level.INFO, "El usuario con id "+usuario.getId()+" e email "+usuario.getEmail()+ " no pudo realizar la compra de la oferta con id "+oferta.getId());
 	}
 
 	public Page<Oferta> getOfertasForUser (Pageable pageable, User user){

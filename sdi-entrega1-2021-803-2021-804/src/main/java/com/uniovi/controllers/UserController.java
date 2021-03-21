@@ -2,6 +2,8 @@ package com.uniovi.controllers;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpSession;
 
@@ -49,10 +51,13 @@ public class UserController {
 	
 	@Autowired
 	private HttpSession httpSession;
+	
+	private Logger log = Logger.getLogger("WallapopLogger");
 
 	@RequestMapping("/user/list")
 	public String getListado(Model model) {
 		model.addAttribute("usersList", userService.getUsers());
+		log.log(Level.INFO, "ADMIN: el administrador ha accedido a la lista de usuarios");
 		return "user/list";
 	}
 
@@ -78,7 +83,9 @@ public class UserController {
 	public String delete(ServletWebRequest request) {
 		if(request.getParameterValues("idChecked") != null) {
 			for(String idCheck : request.getParameterValues("idChecked")) {
+				User u = userService.getUser(Long.valueOf(idCheck));
 				userService.deleteUser(Long.valueOf(idCheck));
+				log.log(Level.INFO, "ADMIN: El usuario con id "+idCheck+" e email "+u.getEmail()+ " ha sido eliminado por el administrador");
 			}
 		}
 		return "redirect:/user/list";
@@ -100,6 +107,7 @@ public class UserController {
 		user.setRol(rolesService.getRoles()[0]);
 		user.setSaldo(100);
 		userService.addUser(user);
+		log.log(Level.INFO, "El usuario con id "+user.getId()+" e email "+user.getEmail()+ "ha sido registrado");
 		securityService.autoLogin(user.getEmail(), user.getPasswordConfirm());
 		return "redirect:home";
 	}
@@ -124,6 +132,7 @@ public class UserController {
 	    if(idusers != null){
 	        for(String idd : idusers){
 	            Long id = Long.parseLong(idd);
+	            log.log(Level.INFO, "ADMIN: El usuario con id "+id+" e email "+userService.getUser(id).getEmail()+ " ha sido eliminado por el administrador");
 	            userService.deleteUser(id);
 	         } 
 	    }
